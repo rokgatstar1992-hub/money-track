@@ -62,15 +62,14 @@
             </div>
         </div>
 
-        <!-- Header -->
-        <div class="grid grid-cols-3 items-center mb-4 border-b border-white/50 pb-2">
-            <div class="flex gap-1 no-print invisible"><button class="px-3 py-1.5 text-[10px]">PDF</button></div>
-            <h1 class="text-xl font-bold text-slate-800 text-center whitespace-nowrap" id="ui-title">✨ ระบบจัดการเงินและบัญชีธนาคาร</h1>
-            <div class="flex gap-1 justify-end no-print">
-                <button onclick="window.print()" class="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-full text-[10px] font-medium transition-all shadow-md shadow-blue-100">
+        <!-- Responsive Header แก้ไขจุดนี้เพื่อรองรับมือถือ -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 border-b border-white/50 pb-3 gap-2">
+            <h1 class="text-lg md:text-xl font-bold text-slate-800 text-center md:text-left order-1" id="ui-title">✨ ระบบจัดการเงินและบัญชีธนาคาร</h1>
+            <div class="flex gap-1.5 justify-center md:justify-end no-print order-2">
+                <button onclick="window.print()" class="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-full text-[10px] font-medium transition-all shadow-md shadow-blue-100">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12 a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> PDF
                 </button>
-                <button onclick="exportToCSV()" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-full text-[10px] font-medium transition-all shadow-md shadow-emerald-100">
+                <button onclick="exportToCSV()" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-full text-[10px] font-medium transition-all shadow-md shadow-emerald-100">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> CSV
                 </button>
             </div>
