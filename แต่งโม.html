@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แตงโมชุมพลบุรี - หวาน ฉ่ำ แดง การันตีจากไร่</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #fcfcfc;
+            scroll-behavior: smooth;
+        }
+
+        .watermelon-gradient {
+            background: linear-gradient(135deg, #ff4d4d 0%, #ff1a1a 100%);
+        }
+
+        .floating-watermelon {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .seed-pattern {
+            background-image: radial-gradient(#000 20%, transparent 20%);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+            opacity: 0.03;
+        }
+
+        .modal-show {
+            animation: modalFadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .line-color {
+            background-color: #06C755;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-3xl">🍉</span>
+                    <span class="text-2xl font-bold text-red-600 tracking-tighter">แตงโม<span class="text-green-700">ชุมพลบุรี</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 font-medium text-gray-700">
+                    <a href="#home" class="hover:text-red-600 transition">หน้าแรก</a>
+                    <a href="#wholesale" class="hover:text-red-600 transition">เสนอราคาขายส่ง</a>
+                    <a href="#gallery" class="hover:text-red-600 transition">ภาพจากไร่</a>
+                    <a href="#terms" class="hover:text-red-600 transition">เงื่อนไข</a>
+                </div>
+                <a href="https://line.me/ti/p/~@yourlineid" target="_blank" class="line-color text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 hover:opacity-90 transition">
+                    <i class="fa-brands fa-line text-xl"></i> ติดต่อเรา
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 overflow-hidden bg-white">
+        <div class="absolute inset-0 seed-pattern pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <span class="inline-block px-4 py-1 rounded-full bg-red-50 text-red-600 border border-red-100 font-bold text-sm mb-4">
+                        ของดีเมืองสุรินทร์ ส่งตรงจากไร่ อ.ชุมพลบุรี
+                    </span>
+                    <h1 class="text-5xl md:text-7xl font-bold text-gray-900 leading-[1.2] mb-8">
+                        หวานกรอบ <br>
+                        <span class="text-red-600 inline-block pt-2">แดงฉ่ำ</span> ชื่นใจ
+                    </h1>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#wholesale" class="watermelon-gradient text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2">
+                            เสนอราคาขายส่ง <i class="fa-solid fa-tag"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=600" alt="" class="rounded-[50px] shadow-2xl floating-watermelon border-8 border-white max-w-sm">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wholesale Section -->
+    <section id="wholesale" class="py-24 bg-white relative overflow-hidden border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-green-600 font-bold tracking-widest uppercase text-sm">Wholesale Opportunities</span>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-gray-900">สั่งซื้อจำนวนมาก / เสนอราคา</h2>
+                <p class="text-gray-600 text-xl max-w-3xl mx-auto italic">ติดต่อเพื่อรับเรทราคาพิเศษสำหรับพ่อค้าแม่ค้าโดยเฉพาะ</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-[40px] shadow-lg border border-gray-100 flex flex-col items-center text-center transform transition hover:-translate-y-2">
+                    <div class="text-5xl mb-6">🚜</div>
+                    <h3 class="text-2xl font-bold mb-4">เหมาไร่</h3>
+                    <p class="text-gray-500 mb-8 flex-grow">ลงทุนล่วงหน้า รับผลผลิตทั้งหมดจากพื้นที่ปลูกในราคาต้นทุน</p>
+                    <button onclick="openWholesaleModal('เหมาไร่')" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold hover:bg-green-700 transition">สนใจเสนอราคา</button>
+                </div>
+                <div class="bg-white p-8 rounded-[40px] shadow-lg border border-gray-100 flex flex-col items-center text-center transform transition hover:-translate-y-2">
+                    <div class="text-5xl mb-6">🚛</div>
+                    <h3 class="text-2xl font-bold mb-4">สั่งเป็นตัน</h3>
+                    <p class="text-gray-500 mb-8 flex-grow">สั่งซื้อปริมาณมากเพื่อกระจายสินค้าต่อ เข้ามาคัดที่ไร่ได้เอง</p>
+                    <button onclick="openWholesaleModal('สั่งเป็นตัน')" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold hover:bg-red-700 transition">สนใจเสนอราคา</button>
+                </div>
+                <div class="bg-white p-8 rounded-[40px] shadow-lg border border-gray-100 flex flex-col items-center text-center transform transition hover:-translate-y-2">
+                    <div class="text-5xl mb-6">🏬</div>
+                    <h3 class="text-2xl font-bold mb-4">ส่งห้าง/ร้านค้า</h3>
+                    <p class="text-gray-500 mb-8 flex-grow">สำหรับบริษัทหรือร้านค้าที่ต้องการแตงโมคัดเกรดพรีเมียมสม่ำเสมอ</p>
+                    <button onclick="openWholesaleModal('ส่งห้าง/ร้านค้า')" class="w-full bg-yellow-500 text-white py-4 rounded-2xl font-bold hover:bg-yellow-600 transition">สนใจเสนอราคา</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farm Gallery Section (เพิ่มใหม่ 4 ช่องสำหรับใส่รูปภาพ) -->
+    <section id="gallery" class="py-24 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">บรรยากาศจากไร่</h2>
+                <p class="text-gray-500 italic text-lg">รูปภาพผลผลิตและบรรยากาศจริงจากไร่ชุมพลบุรี</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- ช่องใส่รูปที่ 1 -->
+                <div class="group overflow-hidden rounded-[40px] shadow-lg h-80 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center relative">
+                    <img src="" alt="" class="w-full h-full object-cover hidden" id="img-slot-1">
+                    <div class="text-gray-400 text-center p-4" id="placeholder-1">
+                        <i class="fa-solid fa-image text-4xl mb-2"></i>
+                        <p class="text-sm">ช่องสำหรับใส่รูปที่ 1</p>
+                    </div>
+                </div>
+                <!-- ช่องใส่รูปที่ 2 -->
+                <div class="group overflow-hidden rounded-[40px] shadow-lg h-80 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center relative">
+                    <img src="" alt="" class="w-full h-full object-cover hidden" id="img-slot-2">
+                    <div class="text-gray-400 text-center p-4" id="placeholder-2">
+                        <i class="fa-solid fa-image text-4xl mb-2"></i>
+                        <p class="text-sm">ช่องสำหรับใส่รูปที่ 2</p>
+                    </div>
+                </div>
+                <!-- ช่องใส่รูปที่ 3 -->
+                <div class="group overflow-hidden rounded-[40px] shadow-lg h-80 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center relative">
+                    <img src="" alt="" class="w-full h-full object-cover hidden" id="img-slot-3">
+                    <div class="text-gray-400 text-center p-4" id="placeholder-3">
+                        <i class="fa-solid fa-image text-4xl mb-2"></i>
+                        <p class="text-sm">ช่องสำหรับใส่รูปที่ 3</p>
+                    </div>
+                </div>
+                <!-- ช่องใส่รูปที่ 4 -->
+                <div class="group overflow-hidden rounded-[40px] shadow-lg h-80 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center relative">
+                    <img src="" alt="" class="w-full h-full object-cover hidden" id="img-slot-4">
+                    <div class="text-gray-400 text-center p-4" id="placeholder-4">
+                        <i class="fa-solid fa-image text-4xl mb-2"></i>
+                        <p class="text-sm">ช่องสำหรับใส่รูปที่ 4</p>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-8 text-center text-gray-400 text-sm italic">* พี่สามารถนำ URL รูปภาพมาใส่ใน attribute src ของ tag img ในโค้ดได้เลยนะครับ</p>
+        </div>
+    </section>
+
+    <!-- Terms Section -->
+    <section id="terms" class="py-20 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-3xl mx-auto px-4">
+            <div class="bg-white p-10 rounded-[40px] shadow-sm border border-gray-200">
+                <h3 class="text-2xl font-bold mb-6 text-gray-900 border-b pb-4">เงื่อนไขการเสนอราคาและการสั่งซื้อ</h3>
+                <ul class="space-y-4 text-gray-600">
+                    <li class="flex gap-3 items-start">
+                        <i class="fa-solid fa-circle-check text-green-600 mt-1"></i>
+                        <span>ราคาที่เสนอต้องครอบคลุมค่าขนส่ง (หรือระบุหากต้องการมารับเองที่ไร่)</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <i class="fa-solid fa-circle-check text-green-600 mt-1"></i>
+                        <span>เมื่อกดส่งราคา ระบบจะบันทึกไฟล์และแสดงหน้าสรุป <b>กรุณาแคปภาพหน้าจอส่งมาที่ Line ID: @watermelon_cp</b> เพื่อยืนยัน</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <i class="fa-solid fa-circle-check text-green-600 mt-1"></i>
+                        <span>ทางไร่ขอสงวนสิทธิ์ในการพิจารณาข้อเสนอตามความเหมาะสมของผลผลิตในช่วงเวลานั้น</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <i class="fa-solid fa-circle-check text-green-600 mt-1"></i>
+                        <span>กรณีตกลงราคาได้ จะมีการทำสัญญาและวางเงินมัดจำตามที่ตกลงกัน</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wholesale Lead Modal (เสนอราคา) -->
+    <div id="wholesale-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-xl rounded-[40px] shadow-2xl overflow-hidden modal-show max-h-[90vh] flex flex-col">
+            <div class="p-6 bg-green-700 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-2xl font-bold">แบบฟอร์มเสนอราคา</h3>
+                    <p class="text-green-100 text-sm">บันทึก CSV และแคปส่ง Line ยืนยัน</p>
+                </div>
+                <button onclick="closeWholesaleModal()" class="hover:rotate-90 transition-transform"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            
+            <form id="wholesale-form" onsubmit="submitWholesale(event)" class="p-8 overflow-y-auto space-y-5">
+                <div class="space-y-1">
+                    <label class="text-sm font-bold text-gray-700 ml-1">ประเภทที่สนใจ (ห้ามแก้ไข)</label>
+                    <input type="text" id="ws-type" readonly class="w-full p-4 bg-gray-100 border border-gray-200 rounded-2xl font-bold text-green-700 outline-none cursor-not-allowed">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-sm font-bold text-gray-700 ml-1">ชื่อ-นามสกุล / ชื่อร้าน</label>
+                        <input type="text" required id="ws-name" placeholder="ระบุชื่อของคุณ" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-sm font-bold text-gray-700 ml-1">เบอร์โทรศัพท์ติดต่อ</label>
+                        <input type="tel" required id="ws-phone" placeholder="08X-XXX-XXXX" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-bold text-gray-700 ml-1">ที่อยู่ / พื้นที่จัดส่ง</label>
+                    <textarea required id="ws-address" rows="2" placeholder="ระบุที่อยู่จัดส่งโดยละเอียด" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-500 outline-none"></textarea>
+                </div>
+
+                <div class="bg-red-50 p-6 rounded-3xl border border-red-100">
+                    <label class="text-sm font-bold text-red-700 flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-tag"></i> ราคาที่คุณต้องการเสนอ (บาท)
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-red-600 font-bold">฿</span>
+                        <input type="number" required id="ws-price" placeholder="ระบุราคาที่ต้องการเสนอ" class="w-full p-4 pl-10 bg-white border border-red-200 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none font-bold text-xl text-red-600">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-green-700 text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-green-800 transform active:scale-95 transition">
+                    ส่งข้อเสนอราคา
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Final Step / Capture Modal -->
+    <div id="capture-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-white w-full max-w-md rounded-[40px] shadow-2xl p-10 text-center modal-show">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">
+                <i class="fa-solid fa-camera"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">ส่งข้อมูลเรียบร้อย!</h3>
+            <p class="text-gray-600 mb-8 leading-relaxed">
+                นายได้บันทึกไฟล์ CSV ลงเครื่องพี่แล้ว<br>
+                <span class="font-bold text-red-600">กรุณาแคปหน้าจอนี้</span> และส่งไปที่<br>
+                <span class="text-xl font-bold text-green-600">Line ID: @watermelon_cp</span><br>
+                เพื่อให้ผู้ใหญ่ยืนยันราคาครับ
+            </p>
+            <div class="bg-gray-50 p-6 rounded-3xl text-left border border-gray-100 mb-8 text-sm">
+                <p><b>ประเภท:</b> <span id="sum-type"></span></p>
+                <p><b>ชื่อ:</b> <span id="sum-name"></span></p>
+                <p><b>ราคาเสนอ:</b> <span id="sum-price" class="text-red-600 font-bold"></span></p>
+            </div>
+            <div class="flex flex-col gap-3">
+                <a href="https://line.me/ti/p/~@yourlineid" target="_blank" class="w-full line-color text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-line text-xl"></i> เปิดแอป Line
+                </a>
+                <button onclick="closeAllModals()" class="text-gray-400 font-medium">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message Toast -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[200] hidden bg-gray-900 text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+        <span class="text-green-400 text-xl">✓</span>
+        <span id="toast-msg">บันทึกข้อมูลเรียบร้อย!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 text-center md:text-left">
+            <div>
+                <h4 class="text-2xl font-bold mb-4 text-red-500">ติดต่อผู้ใหญ่เสมือน ศรีละออน</h4>
+                <p class="text-gray-400">ต.ไพรขลา อ.ชุมพลบุรี จ.สุรินทร์</p>
+                <p class="text-3xl font-bold mt-4">Line ID: @watermelon_cp</p>
+            </div>
+            <div class="flex flex-col items-center md:items-end justify-center">
+                <p class="text-gray-500 mb-4">&copy; 2024 ไร่แตงโมชุมพลบุรี ของดีเมืองสุรินทร์</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Wholesale Functions
+        function openWholesaleModal(type) {
+            document.getElementById('ws-type').value = type;
+            document.getElementById('wholesale-modal').classList.remove('hidden');
+        }
+
+        function closeWholesaleModal() {
+            document.getElementById('wholesale-modal').classList.add('hidden');
+        }
+
+        function closeAllModals() {
+            document.getElementById('wholesale-modal').classList.add('hidden');
+            document.getElementById('capture-modal').classList.add('hidden');
+        }
+
+        function downloadCSV(data) {
+            const headers = ["หัวข้อ", "ชื่อ-นามสกุล", "เบอร์โทร", "ที่อยู่", "ราคาที่เสนอ"];
+            const rows = [[data.type, data.name, data.phone, data.address, data.price]];
+            let csvContent = "\ufeff" + headers.join(",") + "\n";
+            rows.forEach(row => {
+                const rowStr = row.map(val => `"${val.toString().replace(/"/g, '""')}"`).join(",");
+                csvContent += rowStr + "\n";
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `เสนอราคา_${data.name}_${new Date().getTime()}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function submitWholesale(event) {
+            event.preventDefault();
+            const data = {
+                type: document.getElementById('ws-type').value,
+                name: document.getElementById('ws-name').value,
+                phone: document.getElementById('ws-phone').value,
+                address: document.getElementById('ws-address').value,
+                price: document.getElementById('ws-price').value
+            };
+            
+            // บันทึก CSV
+            downloadCSV(data);
+            
+            // แสดงข้อมูลในหน้าต่างสรุปเพื่อให้ลูกค้าแคปภาพ
+            document.getElementById('sum-type').innerText = data.type;
+            document.getElementById('sum-name').innerText = data.name;
+            document.getElementById('sum-price').innerText = "฿" + Number(data.price).toLocaleString();
+            
+            closeWholesaleModal();
+            document.getElementById('capture-modal').classList.remove('hidden');
+            document.getElementById('wholesale-form').reset();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+    </script>
+</body>
+</html>
