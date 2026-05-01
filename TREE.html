@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGDA - National Green Digital Asset</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Kanit:wght@300;400;600&display=swap');
+        
+        body { 
+            font-family: 'Inter', 'Kanit', sans-serif; 
+            background-color: #01110a; 
+            color: #ecfdf5;
+            overflow-x: hidden; 
+            position: relative;
+            letter-spacing: -0.01em;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(1, 17, 10, 0.9) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .green-gradient { background: linear-gradient(135deg, #052e16 0%, #01110a 100%); }
+        
+        @keyframes scan {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(650px); opacity: 0; }
+        }
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to bottom, rgba(74, 222, 128, 0), rgba(74, 222, 128, 0.8), rgba(74, 222, 128, 0));
+            box-shadow: 0 0 20px #4ade80;
+            z-index: 20;
+            animation: scan 4s linear infinite;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #01110a; }
+        ::-webkit-scrollbar-thumb { background: #065f46; border-radius: 10px; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .system-font { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body>
+
+<div class="min-h-screen flex flex-col relative z-10">
+    <!-- Navbar -->
+    <nav class="green-gradient text-white sticky top-0 z-50 shadow-2xl border-b border-green-900/50">
+        <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3 md:gap-4">
+                <div class="bg-white p-2 rounded-xl shadow-lg shrink-0">
+                    <i data-lucide="sprout" class="text-green-800 w-6 h-6 md:w-8 md:h-8"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold leading-none tracking-tight">NGDA PORTAL</h1>
+                    <span id="nav-subtitle" class="text-[9px] md:text-[10px] uppercase opacity-60 tracking-[0.15em] md:tracking-[0.2em] font-semibold block">National Green Asset System</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 md:gap-4">
+                <div class="hidden lg:flex flex-col items-end border-r border-white/20 pr-6">
+                    <span id="current-date" class="text-[10px] opacity-70 font-semibold uppercase tracking-wider"></span>
+                    <span id="current-time" class="font-mono font-bold text-sm text-green-400"></span>
+                </div>
+                
+                <div class="flex items-center gap-2 md:gap-4">
+                    <div class="flex items-center bg-black/30 rounded-lg p-0.5 border border-white/10">
+                        <button onclick="changeLang('TH')" class="px-2 py-1 text-[9px] md:text-[10px] font-bold rounded bg-green-600 text-white transition-all" id="lang-th">TH</button>
+                        <button onclick="changeLang('EN')" class="px-2 py-1 text-[9px] md:text-[10px] font-bold rounded hover:bg-white/10 text-gray-400 transition-all" id="lang-en">EN</button>
+                    </div>
+
+                    <div class="text-right hidden sm:block border-l border-white/10 pl-4">
+                        <p id="founder-label" class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">Project Founder</p>
+                        <p class="text-xs md:text-sm font-bold text-white system-font tracking-tight">Mr. Watcharapong Pimman</p>
+                    </div>
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-500/10 border border-green-400/30 flex items-center justify-center cursor-pointer hover:bg-green-500/20 transition-all">
+                        <i data-lucide="crown" class="w-4 h-4 md:w-5 md:h-5 text-green-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 md:p-8 flex-grow">
+        
+        <!-- Section 1: Satellite -->
+        <div class="w-full mb-10 md:mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-1.5 h-6 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+                <h2 id="section-1-title" class="text-lg md:text-xl font-bold text-white uppercase tracking-tight">01. Real-time Geospatial Surveillance</h2>
+            </div>
+            <div class="bg-gray-900 rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-green-500/20 relative">
+                <div class="absolute top-0 left-0 w-full z-30 p-4 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center pointer-events-none gap-4">
+                    <div class="bg-black/80 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-2xl w-full md:w-auto">
+                        <div class="flex items-center gap-3 mb-3">
+                            <i data-lucide="satellite" class="text-blue-400 w-4 h-4 md:w-5 md:h-5 animate-pulse"></i>
+                            <span id="telemetry-label" class="text-[10px] md:text-[11px] font-bold text-white uppercase tracking-wider">SAT-KORAT-WIDE-01 Telemetry</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-4 md:gap-x-6 gap-y-2 font-mono text-[9px] md:text-[10px] text-gray-400 border-t border-white/5 pt-3">
+                            <span>COORD: <span class="text-white">14.9°N, 102.1°E</span></span>
+                            <span>ZOOM: <span class="text-white">PANORAMIC</span></span>
+                            <span id="air-quality-label">AIR QUALITY: <span class="text-emerald-400">GOOD</span></span>
+                            <span>PM 2.5: <span id="pm25-val" class="text-green-400">12.4 µg/m³</span></span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 items-end w-full md:w-auto">
+                        <div id="verified-label" class="bg-green-600/90 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 text-white text-[9px] md:text-[10px] font-bold shadow-lg uppercase tracking-widest">
+                            Property Verified
+                        </div>
+                        <div class="bg-blue-600/90 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 text-white text-[9px] md:text-[10px] font-bold shadow-lg uppercase tracking-widest flex items-center gap-2">
+                             <i data-lucide="wind" class="w-3 h-3"></i> AQI: <span id="aqi-val">34</span> <span id="aqi-status">(Moderate)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative h-[300px] md:h-[500px] lg:h-[600px] w-full overflow-hidden bg-black">
+                    <div class="scan-line"></div>
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] hover:scale-105" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000');">
+                        <div class="absolute inset-0 bg-black/10"></div>
+                    </div>
+                </div>
+
+                <div class="p-4 md:p-6 bg-black/80 backdrop-blur-xl border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div class="flex flex-wrap gap-6 md:gap-10">
+                        <div>
+                            <p id="carbon-label" class="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase mb-1 tracking-[0.15em] md:tracking-[0.2em]">Carbon Sequestration</p>
+                            <p class="text-white font-bold text-lg md:text-xl system-font">12,845.20 <span class="text-xs text-gray-400">tCO2e</span></p>
+                        </div>
+                        <div>
+                            <p id="dna-label" class="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase mb-1 tracking-[0.15em] md:tracking-[0.2em]">DNA Integrity</p>
+                            <p id="dna-status" class="text-green-400 font-bold text-lg md:text-xl tracking-tighter uppercase system-font">Secured (99.8%)</p>
+                        </div>
+                        <div class="hidden sm:block">
+                            <p id="pm-header-label" class="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase mb-1 tracking-[0.15em] md:tracking-[0.2em]">Atmospheric PM2.5</p>
+                            <p class="text-emerald-400 font-bold text-lg md:text-xl system-font">12.4 <span class="text-xs text-gray-400">μg/m³</span></p>
+                        </div>
+                    </div>
+                    <button id="export-btn" class="w-full md:w-auto bg-green-600 hover:bg-green-500 text-white text-[10px] md:text-[11px] px-6 md:px-8 py-3 md:py-4 rounded-xl transition-all font-bold shadow-lg uppercase tracking-widest border border-green-400/30 shrink-0">
+                        Export Compliance Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Charts -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-6 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+            <h2 id="section-2-title" class="text-lg md:text-xl font-bold text-white uppercase tracking-tight">02. Multi-Regional Asset Analytics</h2>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-10 md:mb-12">
+            <div class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 shadow-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+                    <div>
+                        <h3 id="chart-1-title" class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="bar-chart-3" class="text-green-400"></i> ปริมาณคาร์บอนเครดิตสะสม
+                        </h3>
+                        <p id="chart-1-subtitle" class="text-[9px] md:text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-semibold">Cumulative Carbon Statistics</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Metric: tCO2e</span>
+                    </div>
+                </div>
+                <div class="h-[250px] md:h-[300px]">
+                    <canvas id="regionalBarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 shadow-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+                    <div>
+                        <h3 id="chart-2-title" class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="pie-chart" class="text-emerald-400"></i> สัดส่วนประเภทพื้นที่ป่าดิจิทัล
+                        </h3>
+                        <p id="chart-2-subtitle" class="text-[9px] md:text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-semibold">Asset Segmentation Model</p>
+                    </div>
+                    <div class="text-right">
+                        <span id="official-badge" class="text-[9px] md:text-[10px] font-bold text-emerald-500 bg-emerald-950/40 px-3 py-1 rounded border border-emerald-800 tracking-widest whitespace-nowrap">OFFICIAL DATA</span>
+                    </div>
+                </div>
+                <div class="h-[250px] md:h-[300px] flex justify-center">
+                    <canvas id="typePieChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Stats -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-6 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+            <h2 id="section-3-title" class="text-lg md:text-xl font-bold text-white uppercase tracking-tight">03. Green Asset Ledger Summary</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 md:mb-12">
+            <div class="glass-card rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-xl hover:bg-white/5 transition-all group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 md:p-3 bg-green-900/50 rounded-2xl text-green-400 border border-green-500/30">
+                        <i data-lucide="wallet" class="w-5 h-5 md:w-6 md:h-6"></i>
+                    </div>
+                    <span class="text-[9px] md:text-[10px] font-bold text-green-400 bg-green-900/40 px-2 py-1 rounded-lg border border-green-500/20">+12.5%</span>
+                </div>
+                <p id="stat-1-label" class="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">NGDA Balance</p>
+                <div class="flex items-baseline gap-2">
+                    <h2 id="ngda-balance" class="text-2xl md:text-3xl font-bold text-white tracking-tight group-hover:text-green-400 transition-colors system-font">1,250.45</h2>
+                    <span class="text-[10px] md:text-xs font-bold text-green-400 uppercase tracking-tighter">NGDA</span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-xl hover:bg-white/5 transition-all group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 md:p-3 bg-blue-900/50 rounded-2xl text-blue-400 border border-blue-500/30">
+                        <i data-lucide="file-check" class="w-5 h-5 md:w-6 md:h-6"></i>
+                    </div>
+                    <span id="tax-status-badge" class="text-[9px] md:text-[10px] font-bold text-blue-400 bg-blue-900/40 px-2 py-1 rounded-lg border border-green-500/20">Tax Deductible</span>
+                </div>
+                <p id="stat-2-label" class="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Property Tax Saving</p>
+                <div class="flex items-baseline gap-2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-white group-hover:text-blue-400 transition-colors system-font">45,000.00</h2>
+                    <span class="text-[10px] md:text-xs font-bold text-blue-400 uppercase">THB/Y</span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-xl hover:bg-white/5 transition-all group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 md:p-3 bg-emerald-900/50 rounded-2xl text-emerald-400 border border-emerald-500/30">
+                        <i data-lucide="trees" class="w-5 h-5 md:w-6 md:h-6"></i>
+                    </div>
+                    <span id="canopy-status" class="text-[9px] md:text-[10px] font-bold text-emerald-400 bg-emerald-950/40 px-2 py-1 rounded-lg border border-green-500/20">Optimal</span>
+                </div>
+                <p id="stat-3-label" class="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Total Verified Canopy</p>
+                <div class="flex items-baseline gap-2">
+                    <h2 class="text-2xl md:text-3xl font-bold text-white group-hover:text-emerald-400 transition-colors system-font">120/100</h2>
+                    <span id="unit-label" class="text-[10px] md:text-xs font-bold text-emerald-400 uppercase">Units</span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-xl hover:bg-white/5 transition-all group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 md:p-3 bg-orange-900/50 rounded-2xl text-orange-400 border border-orange-500/30">
+                        <i data-lucide="wind" class="w-5 h-5 md:w-6 md:h-6"></i>
+                    </div>
+                    <span id="pm-status-badge" class="text-[9px] md:text-[10px] font-bold text-orange-400 bg-orange-950/40 px-2 py-1 rounded-lg border border-green-500/20">PM 2.5 Monitoring</span>
+                </div>
+                <p id="stat-4-label" class="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Average Air Quality</p>
+                <div class="flex items-baseline gap-2">
+                    <h2 id="summary-pm" class="text-2xl md:text-3xl font-bold text-white group-hover:text-orange-400 transition-colors system-font">12.40</h2>
+                    <span class="text-[10px] md:text-xs font-bold text-orange-600 uppercase">μg/m³</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lower Sections -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 shadow-2xl relative overflow-hidden group">
+                <div class="absolute -top-6 -right-6 p-4 opacity-5 group-hover:scale-125 transition-transform duration-500 text-green-400">
+                    <i data-lucide="landmark" class="w-24 h-24 md:w-32 md:h-32"></i>
+                </div>
+                <h3 id="section-4-title" class="text-base md:text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="shield-check" class="text-blue-400"></i> 4. สรุปภาษีปี 2569
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center text-xs md:text-sm">
+                        <span id="tax-est-label" class="text-gray-400 font-semibold uppercase text-[9px] md:text-[10px] tracking-wider">Estimated Property Tax</span>
+                        <span class="text-gray-500 line-through system-font">45,000.00 ฿</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs md:text-sm font-bold text-green-400 bg-green-900/20 p-3 md:p-4 rounded-xl md:rounded-2xl border border-green-500/20">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="gift" class="w-3 h-3 md:w-4 md:h-4"></i>
+                            <span id="rebate-label" class="uppercase text-[9px] md:text-[10px] tracking-widest">NGDA Green Credit Rebate</span>
+                        </div>
+                        <span class="system-font">- 45,000.00 ฿</span>
+                    </div>
+                    <div class="pt-6 border-t border-dashed border-gray-700 flex justify-between items-end">
+                        <div>
+                            <p id="payable-label" class="text-[9px] md:text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Total Payable Balance</p>
+                            <p class="text-3xl md:text-4xl font-bold text-white system-font">0.00 <span class="text-base md:text-lg font-normal text-gray-500">฿</span></p>
+                        </div>
+                        <span id="settled-label" class="bg-green-500 text-white text-[9px] md:text-[10px] px-3 md:px-4 py-1.5 md:py-2 rounded-full font-bold shadow-lg tracking-widest border border-white/20 uppercase">Settled</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 shadow-2xl">
+                <h3 id="section-5-title" class="text-base md:text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="package" class="text-green-500"></i> 5. ขอรับพันธุ์ไม้ DNA
+                </h3>
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label id="dna-select-label" class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">เลือกสายพันธุ์ (DNA Registry)</label>
+                            <select id="dna-options" class="w-full p-3 md:p-4 bg-black/40 border border-green-500/20 rounded-xl md:rounded-2xl text-xs md:text-sm text-white focus:ring-2 ring-green-500 outline-none transition-all cursor-pointer font-semibold">
+                                <option class="bg-gray-900" value="0">พะยูง (Genetic Seedling A-01)</option>
+                                <option class="bg-gray-900" value="1">ประดู่ป่า (Genetic Seedling B-04)</option>
+                                <option class="bg-gray-900" value="2">มะค่าโมง (Genetic Seedling C-09)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label id="quota-label" class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">จำนวนต้น (Quotas)</label>
+                            <div class="relative">
+                                <input type="number" value="20" class="w-full p-3 md:p-4 bg-black/40 border border-green-500/20 rounded-xl md:rounded-2xl text-xs md:text-sm text-white font-bold system-font focus:ring-2 ring-green-500 outline-none transition-all">
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="simulateOrder()" id="order-btn" class="w-full green-gradient text-white py-4 md:py-5 rounded-xl md:rounded-2xl font-bold text-[10px] md:text-xs shadow-xl shadow-green-900/40 hover:scale-[1.01] active:scale-95 transition-all border border-green-400/20 uppercase tracking-[0.2em]">
+                        Submit Genetic Resource Reservation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black/40 backdrop-blur-xl border-t border-green-900/50 p-6 md:p-10 mt-12">
+        <div class="container mx-auto text-center">
+            <div class="flex flex-col lg:flex-row justify-between items-center gap-8 mb-8">
+                <div class="flex items-center gap-4 opacity-70">
+                    <div class="bg-white/10 p-2 rounded-lg border border-white/20">
+                         <i data-lucide="building-2" class="w-5 h-5 md:w-6 md:h-6 text-green-400"></i>
+                    </div>
+                    <div class="text-left">
+                        <p id="footer-authority" class="text-[9px] md:text-[10px] font-bold text-white uppercase tracking-[0.2em] leading-tight">Digital Asset Authority</p>
+                        <p id="footer-gov" class="text-[8px] font-bold text-gray-500 uppercase tracking-widest font-semibold mt-1">Royal Government of Thailand</p>
+                    </div>
+                </div>
+                <div id="footer-links" class="flex flex-wrap justify-center gap-4 md:gap-8 text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <a href="#" class="hover:text-green-400 transition-colors">Satellite Logs</a>
+                    <a href="#" class="hover:text-green-400 transition-colors">DNA Registry</a>
+                    <a href="#" class="hover:text-green-400 transition-colors">Tax Policy</a>
+                    <a href="#" class="hover:text-green-400 transition-colors">Node Status</a>
+                </div>
+                <div class="bg-green-950/50 px-4 py-2 rounded-xl border border-green-500/20 font-mono text-[9px] text-green-400">
+                    CHAIN_ID: NGDA-KORAT-PROD-01
+                </div>
+            </div>
+            <div id="footer-copyright" class="text-[8px] md:text-[9px] text-gray-600 font-bold uppercase tracking-widest border-t border-green-900/30 pt-8">
+                &copy; 2026 NGDA PROJECT - DECENTRALIZED GREEN GOVERNANCE | DATA SECURITY LEVEL 4
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- Decorative Gradients -->
+<div class="fixed top-[-10%] right-[-10%] w-[50%] h-[50%] bg-green-500/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+<div class="fixed bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-600/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+<!-- Custom Toast -->
+<div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full text-[10px] md:text-xs font-bold shadow-2xl opacity-0 translate-y-10 transition-all z-[100] pointer-events-none uppercase tracking-widest border border-white/20 whitespace-nowrap">
+    Operation Successful: System Logs Updated
+</div>
+
+<script>
+    lucide.createIcons();
+    let currentLang = 'TH';
+
+    const translations = {
+        TH: {
+            navSubtitle: "ระบบบริหารจัดการพื้นที่ป่าดิจิทัลแห่งชาติ",
+            founderLabel: "ผู้ก่อตั้งโครงการ",
+            section1Title: "01. การเฝ้าระวังทางภูมิสารสนเทศแบบเรียลไทม์",
+            telemetryLabel: "ข้อมูลดาวเทียม SAT-KORAT-WIDE-01",
+            airQualityLabel: "คุณภาพอากาศ: ",
+            airQualityStatus: "ดี",
+            verifiedLabel: "ยืนยันสิทธิ์ครอบครองแล้ว",
+            aqiStatus: "(ปานกลาง)",
+            carbonLabel: "การกักเก็บคาร์บอนสะสม",
+            dnaLabel: "ความสมบูรณ์ทางพันธุกรรม (DNA)",
+            dnaStatus: "ได้รับความคุ้มครอง (99.8%)",
+            pmHeaderLabel: "ค่าฝุ่น PM2.5 ในบรรยากาศ",
+            exportBtn: "ส่งออกรายงานความสอดคล้อง",
+            section2Title: "02. บทวิเคราะห์สินทรัพย์รายภูมิภาค",
+            chart1Title: "ปริมาณคาร์บอนเครดิตสะสม",
+            chart1Subtitle: "สถิติคาร์บอนรวมรายพื้นที่",
+            chart2Title: "สัดส่วนประเภทพื้นที่ป่าดิจิทัล",
+            chart2Subtitle: "โมเดลการแบ่งส่วนสินทรัพย์",
+            officialBadge: "ข้อมูลทางการ",
+            section3Title: "03. สรุปบัญชีแยกประเภทสินทรัพย์สีเขียว",
+            stat1Label: "ยอดคงเหลือ NGDA",
+            stat2Label: "การลดหย่อนภาษีที่ดิน",
+            stat3Label: "พื้นที่เรือนยอดที่ได้รับการรับรอง",
+            stat4Label: "ดัชนีคุณภาพอากาศเฉลี่ย",
+            taxStatusBadge: "ลดหย่อนภาษีได้",
+            canopyStatus: "เหมาะสม",
+            pmStatusBadge: "การเฝ้าระวัง PM 2.5",
+            unitLabel: "หน่วย",
+            section4Title: "4. สรุปภาษีปี 2569",
+            taxEstLabel: "ภาษีที่ดินโดยประมาณ",
+            rebateLabel: "เครดิตส่วนลดสีเขียว NGDA",
+            payableLabel: "ยอดรวมที่ต้องชำระ",
+            settledLabel: "ชำระแล้ว",
+            section5Title: "5. ขอรับพันธุ์ไม้ DNA",
+            dnaSelectLabel: "เลือกสายพันธุ์ (ทะเบียน DNA)",
+            quotaLabel: "จำนวนต้น (โควตา)",
+            orderBtn: "ส่งคำขอสำรองทรัพยากรพันธุกรรม",
+            dnaOptions: ["พะยูง (Genetic Seedling A-01)", "ประดู่ป่า (Genetic Seedling B-04)", "มะค่าโมง (Genetic Seedling C-09)"],
+            footerAuthority: "สำนักงานสินทรัพย์ดิจิทัล",
+            footerGov: "รัฐบาลแห่งราชอาณาจักรไทย",
+            footerCopyright: "© 2026 โครงการ NGDA - ธรรมาภิบาลสีเขียวแบบกระจายศูนย์ | ระดับความปลอดภัยข้อมูล 4",
+            footerLinks: ["บันทึกดาวเทียม", "ทะเบียน DNA", "นโยบายภาษี", "สถานะโหนด"],
+            toastSuccess: "ดำเนินการสำเร็จ: อัปเดตบันทึกระบบแล้ว",
+            toastLang: "เปลี่ยนภาษาเป็นไทยแล้ว",
+            chartLabels: ['ภาคเหนือ', 'ภาคกลาง', 'ภาคอีสาน', 'ภาคใต้', 'ภาคตะวันออก'],
+            chartDataLabel: 'ปริมาณคาร์บอน (ตัน)',
+            pieLabels: ['ป่าเศรษฐกิจ (Digital)', 'ป่าชุมชน (Asset)', 'ป่าอนุรักษ์ (Reserved)']
+        },
+        EN: {
+            navSubtitle: "National Green Asset System",
+            founderLabel: "Project Founder",
+            section1Title: "01. Real-time Geospatial Surveillance",
+            telemetryLabel: "SAT-KORAT-WIDE-01 Telemetry",
+            airQualityLabel: "AIR QUALITY: ",
+            airQualityStatus: "GOOD",
+            verifiedLabel: "Property Verified",
+            aqiStatus: "(Moderate)",
+            carbonLabel: "Carbon Sequestration",
+            dnaLabel: "DNA Integrity",
+            dnaStatus: "Secured (99.8%)",
+            pmHeaderLabel: "Atmospheric PM2.5",
+            exportBtn: "Export Compliance Report",
+            section2Title: "02. Multi-Regional Asset Analytics",
+            chart1Title: "Cumulative Carbon Statistics",
+            chart1Subtitle: "Regional Carbon Aggregation",
+            chart2Title: "Asset Segmentation Model",
+            chart2Subtitle: "Forest Type Distribution",
+            officialBadge: "OFFICIAL DATA",
+            section3Title: "03. Green Asset Ledger Summary",
+            stat1Label: "NGDA Balance",
+            stat2Label: "Property Tax Saving",
+            stat3Label: "Total Verified Canopy",
+            stat4Label: "Average Air Quality",
+            taxStatusBadge: "Tax Deductible",
+            canopyStatus: "Optimal",
+            pmStatusBadge: "PM 2.5 Monitoring",
+            unitLabel: "Units",
+            section4Title: "4. Tax Summary 2026",
+            taxEstLabel: "Estimated Property Tax",
+            rebateLabel: "NGDA Green Credit Rebate",
+            payableLabel: "Total Payable Balance",
+            settledLabel: "Settled",
+            section5Title: "5. Genetic Resource Request",
+            dnaSelectLabel: "Select Species (DNA Registry)",
+            quotaLabel: "Tree Count (Quotas)",
+            orderBtn: "Submit Genetic Resource Reservation",
+            dnaOptions: ["Siamese Rosewood (A-01)", "Burma Padauk (B-04)", "Afzelia Xylocarpa (C-09)"],
+            footerAuthority: "Digital Asset Authority",
+            footerGov: "Royal Government of Thailand",
+            footerCopyright: "© 2026 NGDA PROJECT - DECENTRALIZED GREEN GOVERNANCE | DATA SECURITY LEVEL 4",
+            footerLinks: ["Satellite Logs", "DNA Registry", "Tax Policy", "Node Status"],
+            toastSuccess: "Operation Successful: System Logs Updated",
+            toastLang: "Language switched to English",
+            chartLabels: ['North', 'Central', 'Northeast', 'South', 'East'],
+            chartDataLabel: 'Carbon Volume (Tons)',
+            pieLabels: ['Commercial Forest', 'Community Forest', 'Reserved Forest']
+        }
+    };
+
+    let barChart, pieChart;
+
+    function initCharts() {
+        const langData = translations[currentLang];
+        
+        const barCtx = document.getElementById('regionalBarChart').getContext('2d');
+        barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: langData.chartLabels,
+                datasets: [{
+                    label: langData.chartDataLabel,
+                    data: [450, 280, 590, 320, 190],
+                    backgroundColor: 'rgba(52, 211, 153, 0.4)',
+                    borderColor: '#10b981',
+                    borderWidth: 1.5,
+                    borderRadius: 4,
+                    barThickness: window.innerWidth < 768 ? 15 : 35
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { 
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleFont: { size: 10 },
+                        bodyFont: { size: 10 }
+                    }
+                },
+                scales: {
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.03)' }, 
+                        ticks: { color: '#6b7280', font: { size: 9 } } 
+                    },
+                    x: { 
+                        grid: { display: false }, 
+                        ticks: { color: '#9ca3af', font: { size: 9 } } 
+                    }
+                }
+            }
+        });
+
+        const pieCtx = document.getElementById('typePieChart').getContext('2d');
+        pieChart = new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: langData.pieLabels,
+                datasets: [{
+                    data: [55, 25, 20],
+                    backgroundColor: ['#065f46', '#10b981', '#4b5563'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { 
+                            color: '#9ca3af', 
+                            padding: 20,
+                            font: { size: 9 }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    }
+
+    function changeLang(lang) {
+        currentLang = lang;
+        const data = translations[lang];
+        
+        // UI Buttons
+        document.getElementById('lang-th').className = lang === 'TH' ? "px-2 py-1 text-[9px] md:text-[10px] font-bold rounded bg-green-600 text-white transition-all" : "px-2 py-1 text-[9px] md:text-[10px] font-bold rounded hover:bg-white/10 text-gray-400 transition-all";
+        document.getElementById('lang-en').className = lang === 'EN' ? "px-2 py-1 text-[9px] md:text-[10px] font-bold rounded bg-green-600 text-white transition-all" : "px-2 py-1 text-[9px] md:text-[10px] font-bold rounded hover:bg-white/10 text-gray-400 transition-all";
+
+        // Navigation
+        document.getElementById('nav-subtitle').innerText = data.navSubtitle;
+        document.getElementById('founder-label').innerText = data.founderLabel;
+
+        // Section 1
+        document.getElementById('section-1-title').innerText = data.section1Title;
+        document.getElementById('telemetry-label').innerText = data.telemetryLabel;
+        document.getElementById('air-quality-label').innerHTML = `${data.airQualityLabel} <span class="text-emerald-400">${data.airQualityStatus}</span>`;
+        document.getElementById('verified-label').innerText = data.verifiedLabel;
+        document.getElementById('aqi-status').innerText = data.aqiStatus;
+        document.getElementById('carbon-label').innerText = data.carbonLabel;
+        document.getElementById('dna-label').innerText = data.dnaLabel;
+        document.getElementById('dna-status').innerText = data.dnaStatus;
+        document.getElementById('pm-header-label').innerText = data.pmHeaderLabel;
+        document.getElementById('export-btn').innerText = data.exportBtn;
+
+        // Section 2
+        document.getElementById('section-2-title').innerText = data.section2Title;
+        document.getElementById('chart-1-title').innerHTML = `<i data-lucide="bar-chart-3" class="text-green-400"></i> ${data.chart1Title}`;
+        document.getElementById('chart-1-subtitle').innerText = data.chart1Subtitle;
+        document.getElementById('chart-2-title').innerHTML = `<i data-lucide="pie-chart" class="text-emerald-400"></i> ${data.chart2Title}`;
+        document.getElementById('chart-2-subtitle').innerText = data.chart2Subtitle;
+        document.getElementById('official-badge').innerText = data.officialBadge;
+
+        // Section 3
+        document.getElementById('section-3-title').innerText = data.section3Title;
+        document.getElementById('stat-1-label').innerText = data.stat1Label;
+        document.getElementById('tax-status-badge').innerText = data.taxStatusBadge;
+        document.getElementById('stat-2-label').innerText = data.stat2Label;
+        document.getElementById('canopy-status').innerText = data.canopyStatus;
+        document.getElementById('stat-3-label').innerText = data.stat3Label;
+        document.getElementById('unit-label').innerText = data.unitLabel;
+        document.getElementById('pm-status-badge').innerText = data.pmStatusBadge;
+        document.getElementById('stat-4-label').innerText = data.stat4Label;
+
+        // Section 4
+        document.getElementById('section-4-title').innerHTML = `<i data-lucide="shield-check" class="text-blue-400"></i> ${data.section4Title}`;
+        document.getElementById('tax-est-label').innerText = data.taxEstLabel;
+        document.getElementById('rebate-label').innerText = data.rebateLabel;
+        document.getElementById('payable-label').innerText = data.payableLabel;
+        document.getElementById('settled-label').innerText = data.settledLabel;
+
+        // Section 5
+        document.getElementById('section-5-title').innerHTML = `<i data-lucide="package" class="text-green-500"></i> ${data.section5Title}`;
+        document.getElementById('dna-select-label').innerText = data.dnaSelectLabel;
+        document.getElementById('quota-label').innerText = data.quotaLabel;
+        document.getElementById('order-btn').innerText = data.orderBtn;
+        
+        const dnaSelect = document.getElementById('dna-options');
+        Array.from(dnaSelect.options).forEach((opt, idx) => {
+            opt.innerText = data.dnaOptions[idx];
+        });
+
+        // Footer
+        document.getElementById('footer-authority').innerText = data.footerAuthority;
+        document.getElementById('footer-gov').innerText = data.footerGov;
+        document.getElementById('footer-copyright').innerText = data.footerCopyright;
+        
+        const footerLinks = document.getElementById('footer-links').getElementsByTagName('a');
+        Array.from(footerLinks).forEach((a, idx) => {
+            a.innerText = data.footerLinks[idx];
+        });
+
+        // Charts Update
+        if (barChart && barChart.data) {
+            barChart.data.labels = data.chartLabels;
+            barChart.data.datasets[0].label = data.chartDataLabel;
+            barChart.update();
+        }
+
+        if (pieChart && pieChart.data) {
+            pieChart.data.labels = data.pieLabels;
+            pieChart.update();
+        }
+
+        lucide.createIcons();
+        showToast(data.toastLang);
+        updateClock();
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.classList.remove('opacity-0', 'translate-y-10');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-y-10');
+            toast.classList.remove('opacity-100', 'translate-y-0');
+        }, 3000);
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        const dateEl = document.getElementById('current-date');
+        const timeEl = document.getElementById('current-time');
+        if (dateEl) dateEl.innerText = now.toLocaleDateString(currentLang === 'TH' ? 'th-TH' : 'en-US', dateOptions);
+        if (timeEl) timeEl.innerText = now.toLocaleTimeString(currentLang === 'TH' ? 'th-TH' : 'en-US', { hour12: false });
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+    
+    window.onload = function() {
+        initCharts();
+    };
+
+    function simulateOrder() {
+        const btn = document.getElementById('order-btn');
+        btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin mx-auto"></i>';
+        lucide.createIcons();
+        setTimeout(() => {
+            btn.innerText = currentLang === 'TH' ? 'ยืนยันธุรกรรมสำเร็จ' : 'Transaction Authorized';
+            btn.classList.remove('green-gradient');
+            btn.classList.add('bg-blue-600');
+            showToast(translations[currentLang].toastSuccess);
+            setTimeout(() => {
+                btn.innerText = translations[currentLang].orderBtn;
+                btn.classList.add('green-gradient');
+                btn.classList.remove('bg-blue-600');
+                lucide.createIcons();
+            }, 3000);
+        }, 1500);
+    }
+
+    function updateEnvironmentalData() {
+        const pmVal = (Math.random() * (15.0 - 10.0) + 10.0).toFixed(1);
+        const aqiVal = Math.floor(pmVal * 2.8);
+        const pmEl = document.getElementById('pm25-val');
+        const sumPmEl = document.getElementById('summary-pm');
+        const aqiEl = document.getElementById('aqi-val');
+        if (pmEl) pmEl.innerText = `${pmVal} µg/m³`;
+        if (sumPmEl) sumPmEl.innerText = pmVal;
+        if (aqiEl) aqiEl.innerText = aqiVal;
+    }
+    setInterval(updateEnvironmentalData, 5000);
+
+    let currentBalance = 1250.45;
+    setInterval(() => {
+        currentBalance += (Math.random() * 0.005);
+        const balEl = document.getElementById('ngda-balance');
+        if (balEl) balEl.innerText = currentBalance.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }, 3000);
+
+    // FIXED: Corrected resize logic with safety checks for barChart datasets
+    window.addEventListener('resize', () => {
+        if (barChart && barChart.data && barChart.data.datasets && barChart.data.datasets[0]) {
+            barChart.data.datasets[0].barThickness = window.innerWidth < 768 ? 15 : 35;
+            barChart.update('none'); 
+        }
+    });
+</script>
+
+</body>
+</html>
