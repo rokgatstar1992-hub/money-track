@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แตงโม อ.ชุมพลบุรี - หวาน กรอบ อร่อยจากดินทราย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .watermelon-gradient {
+            background: linear-gradient(135deg, #2d5a27 0%, #1e3a1a 100%);
+            position: relative;
+        }
+        .watermelon-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-2.5 0-5 5-5 10s2.5 10 5 10 5-5 5-10-2.5-10-5-10z' fill='%23ff4d4d' fill-opacity='0.1'/%3E%3C/svg%3E");
+        }
+        .hero-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q 25 0, 50 10 T 100 10' stroke='%23ffffff' stroke-width='2' fill='none' opacity='0.05'/%3E%3C/svg%3E");
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-blur: 4px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 watermelon-pattern">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🍉</span>
+                <span class="font-bold text-xl text-green-800 uppercase tracking-tight">Chumphon Buri Watermelon</span>
+            </div>
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#home" class="hover:text-green-600 transition">หน้าแรก</a>
+                <a href="#about" class="hover:text-green-600 transition">ทำไมต้องชุมพลบุรี?</a>
+                <a href="#gallery" class="hover:text-green-600 transition">รูปภาพ</a>
+                <a href="#contact" class="hover:text-green-600 transition">ติดต่อเรา</a>
+            </div>
+            <button onclick="openOrderModal('สั่งซื้อทั่วไป')" class="bg-red-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-600 transition shadow-lg">
+                สั่งซื้อเลย
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 pb-12 md:pt-40 md:pb-32 watermelon-gradient text-white overflow-hidden relative">
+        <div class="absolute inset-0 hero-pattern"></div>
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center relative z-10">
+            <div class="md:w-1/2 text-center md:text-left">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-[1.2] md:leading-[1.15]">
+                    แตงโมหวาน <br>
+                    <span class="text-red-400 inline-block mt-2">เนื้อแดงกรอบ</span><br>
+                    จาก อ.ชุมพลบุรี
+                </h1>
+                <p class="text-lg md:text-xl mb-8 text-gray-200">
+                    สัมผัสรสชาติอันเป็นเอกลักษณ์ของแตงโมที่ปลูกบนพื้นดินทรายริมน้ำมูล 
+                    หวานธรรมชาติ ส่งตรงจากไร่ถึงมือคุณ
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
+                    <button onclick="openOrderModal('สั่งซื้อจากหน้าแรก')" class="bg-white text-green-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition text-center shadow-xl">
+                        สั่งซื้อตอนนี้
+                    </button>
+                    <a href="#about" class="border border-white/30 bg-white/10 backdrop-blur-sm px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition text-center">
+                        ทำความรู้จักเรา
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 mt-12 md:mt-0 relative">
+                <div class="w-72 h-72 md:w-96 md:h-96 bg-red-500 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 blur-3xl opacity-30"></div>
+                <div class="relative z-10 transform hover:rotate-3 hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800" 
+                         alt="แตงโมชุมพลบุรี" 
+                         class="rounded-3xl shadow-2xl border-4 border-white/20 object-cover w-full h-[300px] md:h-[450px]"
+                         onerror="this.src='https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?auto=format&fit=crop&q=80&w=800'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-green-900 mb-4">บรรยากาศจากไร่และผลผลิต</h2>
+                <p class="text-gray-600">ภาพบรรยากาศสดๆ ส่งตรงจากอำเภอชุมพลบุรี</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="galleryGrid">
+                <div class="aspect-square rounded-2xl overflow-hidden shadow-lg border-2 border-gray-100">
+                    <img id="img_0" src="https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?auto=format&fit=crop&q=80&w=400" alt="ภาพแตงโม 1" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-square rounded-2xl overflow-hidden shadow-lg border-2 border-gray-100">
+                    <img id="img_1" src="https://images.unsplash.com/photo-1595475207225-428b62bda831?auto=format&fit=crop&q=80&w=400" alt="ภาพแตงโม 2" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-square rounded-2xl overflow-hidden shadow-lg border-2 border-gray-100">
+                    <img id="img_2" src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=400" alt="ภาพแตงโม 3" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-square rounded-2xl overflow-hidden shadow-lg border-2 border-gray-100">
+                    <img id="img_3" src="https://images.unsplash.com/photo-1563270284-18a3dc73c9f2?auto=format&fit=crop&q=80&w=400" alt="ภาพแตงโม 4" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white/80 backdrop-blur-sm border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-16">ความลับความอร่อยของ "แตงโมชุมพลบุรี"</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div class="p-8 rounded-2xl bg-white border border-green-100 card-shadow">
+                    <div class="text-4xl mb-4">🏖️</div>
+                    <h3 class="text-xl font-bold mb-4 text-green-800">ดินทรายริมน้ำมูล</h3>
+                    <p class="text-gray-600">อำเภอชุมพลบุรีมีสภาพดินเป็นดินทราย ซึ่งระบายน้ำได้ดี ทำให้แตงโมสะสมความหวานได้มากกว่าดินชนิดอื่น</p>
+                </div>
+                <div class="p-8 rounded-2xl bg-white border border-red-100 card-shadow">
+                    <div class="text-4xl mb-4">❤️</div>
+                    <h3 class="text-xl font-bold mb-4 text-red-600">เนื้อกรอบ แดงจัด</h3>
+                    <p class="text-gray-600">ด้วยสภาพอากาศและการดูแลอย่างใกล้ชิด ทำให้เนื้อแตงโมมีสีแดงสด ละเอียด และมีความกรอบที่เป็นเอกลักษณ์</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location/About Section -->
+    <section id="about" class="py-24 bg-gray-50/50 backdrop-blur-sm">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="space-y-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-green-900 leading-tight">ถิ่นช้างใหญ่ ผ้าไหมดี แตงโมหวาน</h2>
+                <p class="text-gray-600 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+                    อำเภอชุมพลบุรี จังหวัดสุรินทร์ ไม่ได้มีดีแค่ข้าวหอมมะลิและงานประเพณีบุญบั้งไฟ แต่ที่นี่คือแหล่งปลูกแตงโมที่ใหญ่และอร่อยที่สุดแห่งหนึ่งของภาคอีสาน
+                </p>
+                <div class="flex flex-col md:flex-row justify-center gap-8 pt-8">
+                    <div class="space-y-2 border-l-4 border-green-500 pl-6 text-left">
+                        <p class="text-sm font-semibold uppercase tracking-widest text-green-600">ที่ตั้งฟาร์ม</p>
+                        <p class="text-gray-800 font-medium">หมู่บ้านริมแม่น้ำมูล อ.ชุมพลบุรี จ.สุรินทร์</p>
+                    </div>
+                    <div class="space-y-2 border-l-4 border-red-500 pl-6 text-left">
+                        <p class="text-sm font-semibold uppercase tracking-widest text-red-600">รับประกันคุณภาพ</p>
+                        <p class="text-gray-800 font-medium">ทุกลูกถูกคัดด้วยมือ เก็บสดใหม่วันต่อวัน</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / CTA -->
+    <section id="contact" class="py-20 watermelon-gradient text-white">
+        <div class="absolute inset-0 hero-pattern"></div>
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+            <h2 class="text-4xl font-bold mb-4">อยากลิ้มรสความหวานกรอบหรือยัง?</h2>
+            <p class="text-xl mb-12 opacity-90">เลือกรูปแบบการสั่งซื้อที่ต้องการ แล้วติดต่อเราได้ทันที</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                <button onclick="openOrderModal('สั่งยกไร่')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-6 px-4 rounded-2xl transition shadow-xl border border-white/20 flex flex-col items-center justify-center space-y-2">
+                    <span class="text-3xl">🚜</span>
+                    <span class="text-lg leading-tight">สั่งยกไร่</span>
+                    <span class="text-xs font-normal opacity-80">เหมาสวน ราคาหน้าไร่</span>
+                </button>
+                <button onclick="openOrderModal('สั่งเป็นตัน')" class="bg-green-600 hover:bg-green-700 text-white font-bold py-6 px-4 rounded-2xl transition shadow-xl border border-white/20 flex flex-col items-center justify-center space-y-2">
+                    <span class="text-3xl">🚛</span>
+                    <span class="text-lg leading-tight">สั่งเป็นตัน</span>
+                    <span class="text-xs font-normal opacity-80">จัดส่งด้วยรถใหญ่ทั่วไทย</span>
+                </button>
+                <button onclick="openOrderModal('สั่งแบบเลือกขนาด')" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-6 px-4 rounded-2xl transition shadow-xl border border-white/20 flex flex-col items-center justify-center space-y-2">
+                    <span class="text-3xl">📏</span>
+                    <span class="text-lg leading-tight">สั่งแบบเลือกขนาด</span>
+                    <span class="text-xs font-normal opacity-80">คัดไซส์พิเศษตามใจชอบ</span>
+                </button>
+                <button onclick="openOrderModal('สั่งไปขายปลีก')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-4 rounded-2xl transition shadow-xl border border-white/20 flex flex-col items-center justify-center space-y-2">
+                    <span class="text-3xl">🏬</span>
+                    <span class="text-lg leading-tight">สั่งไปขายปลีก</span>
+                    <span class="text-xs font-normal opacity-80">ราคาส่งสำหรับพ่อค้าแม่ค้า</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a id="lineButton" href="#" class="bg-green-500 hover:bg-green-400 text-white font-bold py-4 px-10 rounded-2xl flex items-center justify-center space-x-3 transition shadow-xl border border-white/10">
+                    <span class="text-2xl">💬</span>
+                    <span id="lineText">LINE: @chumphonburi_wm</span>
+                </a>
+                <a id="phoneButton" href="#" class="bg-white hover:bg-gray-100 text-green-900 font-bold py-4 px-10 rounded-2xl flex items-center justify-center space-x-3 transition shadow-xl">
+                    <span class="text-2xl">📞</span>
+                    <span id="phoneText">โทร: 080-123-4567</span>
+                </a>
+            </div>
+            <p class="mt-12 text-sm opacity-60 italic">*รับจัดส่งทั่วประเทศด้วยรถขนส่งควบคุมอุณหภูมิ</p>
+        </div>
+    </section>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content relative">
+            <button onclick="closeOrderModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            <h3 id="modalTitle" class="text-2xl font-bold text-green-800 mb-2 flex items-center gap-2">
+                <span>🍉</span> รายละเอียดการสั่งซื้อ
+            </h3>
+            <p class="text-sm text-red-600 font-medium mb-6 flex items-center gap-2 bg-red-50 p-2 rounded-lg">
+                <span>⚠️</span> หมายเหตุ: นัดรับที่ไร่หรือพื้นที่จุดรับเท่านั้น และจ่ายเงินที่จุดนัดรับเท่านั้น
+            </p>
+            <form id="orderForm" onsubmit="handleOrderSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                    <input type="text" required name="name" placeholder="ระบุชื่อของคุณ" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">เบอร์โทรศัพท์</label>
+                    <input type="tel" required name="phone" placeholder="ระบุเบอร์ติดต่อ" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">จำนวนที่ต้องการ</label>
+                    <input type="text" required name="quantity" placeholder="เช่น 2 ตัน, 10 ลูก, เหมา 1 ไร่" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">ที่อยู่ลูกค้า</label>
+                    <textarea required name="customer_address" rows="2" placeholder="บ้านเลขที่ ตำบล อำเภอ จังหวัด" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">จุดนัดรับที่ต้องการ</label>
+                    <input type="text" required name="pickup_point" placeholder="เช่น หน้าไร่, จุดนัดรับในตัวเมือง" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <input type="hidden" name="orderType" id="orderTypeHidden">
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl hover:bg-green-700 transition shadow-lg mt-4">
+                    ยืนยันการสั่งซื้อ
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Configuration Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content relative">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <span>🔐</span> แผงควบคุมผู้ดูแล
+            </h3>
+            <div id="authSection" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">กรุณาใส่รหัสผ่านเพื่อแก้ไข</label>
+                    <input type="password" id="adminPassword" placeholder="ระบุรหัสผ่าน 6 หลัก" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <button onclick="verifyAdmin()" class="w-full bg-gray-800 text-white font-bold py-3 rounded-xl hover:bg-black transition shadow-lg">
+                    ยืนยันตัวตน
+                </button>
+            </div>
+            <div id="configSection" class="hidden space-y-6">
+                <!-- Contact Section -->
+                <div class="space-y-3 p-4 bg-gray-50 rounded-2xl">
+                    <h4 class="font-bold text-sm text-gray-500 uppercase tracking-widest">ข้อมูลติดต่อ</h4>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">LINE ID</label>
+                        <input type="text" id="editLineID" class="w-full p-2 border border-gray-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">เบอร์โทร (โชว์)</label>
+                        <input type="text" id="editPhoneText" class="w-full p-2 border border-gray-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">เบอร์โทร (ระบบ)</label>
+                        <input type="text" id="editPhoneLink" class="w-full p-2 border border-gray-300 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <!-- Images Section -->
+                <div class="space-y-3 p-4 bg-gray-50 rounded-2xl">
+                    <h4 class="font-bold text-sm text-gray-500 uppercase tracking-widest">จัดการรูปภาพสินค้า (4 รูป)</h4>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">URL รูปที่ 1</label>
+                        <input type="text" id="editImg0" class="w-full p-2 border border-gray-300 rounded-lg text-sm placeholder:text-gray-400" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">URL รูปที่ 2</label>
+                        <input type="text" id="editImg1" class="w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">URL รูปที่ 3</label>
+                        <input type="text" id="editImg2" class="w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">URL รูปที่ 4</label>
+                        <input type="text" id="editImg3" class="w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="https://...">
+                    </div>
+                </div>
+
+                <button onclick="saveAdminConfig()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition shadow-lg">
+                    บันทึกข้อมูลทั้งหมด
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Toggle Button (Hidden/Floating) -->
+    <button onclick="openAdminModal()" class="fixed bottom-4 right-4 w-10 h-10 bg-gray-200/50 hover:bg-gray-300 rounded-full flex items-center justify-center text-gray-400 opacity-20 hover:opacity-100 transition z-40" title="Admin Login">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-8 md:mb-0">
+                <div class="flex items-center space-x-2 mb-4 justify-center md:justify-start text-white">
+                    <span class="text-2xl">🍉</span>
+                    <span class="font-bold text-xl uppercase tracking-tight">Chumphon Buri</span>
+                </div>
+                <p class="max-w-xs">เราคือกลุ่มเกษตรกรที่มุ่งมั่นนำส่งแตงโมคุณภาพดีที่สุดจากอำเภอชุมพลบุรี จังหวัดสุรินทร์</p>
+            </div>
+            <div class="flex space-x-6 text-sm">
+                <a href="#" class="hover:text-white transition">นโยบายความเป็นส่วนตัว</a>
+                <a href="#" class="hover:text-white transition">เงื่อนไขการจัดส่ง</a>
+                <a href="#" class="hover:text-white transition">เกี่ยวกับเรา</a>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto px-4 mt-12 pt-8 border-t border-gray-800 text-center text-xs">
+            <p>&copy; 2024 แตงโม อ.ชุมพลบุรี. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ==========================================
+        // 🍉 ข้อมูลการตั้งค่า (แก้ไขผ่าน Admin ได้) 🍉
+        // ==========================================
+        let CONTACT_CONFIG = {
+            lineID: "@chumphonburi_wm", 
+            phoneNumber: "080-123-4567",
+            telLink: "0801234567"
+        };
+
+        let GALLERY_IMAGES = [
+            "https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1595475207225-428b62bda831?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1563270284-18a3dc73c9f2?auto=format&fit=crop&q=80&w=400"
+        ];
+
+        const ADMIN_CODE = "132020";
+
+        function updateUI() {
+            // Update Contacts
+            const lineText = document.getElementById('lineText');
+            const lineButton = document.getElementById('lineButton');
+            if(lineText && lineButton) {
+                lineText.innerText = `LINE: ${CONTACT_CONFIG.lineID}`;
+                lineButton.href = `https://line.me/ti/p/~${CONTACT_CONFIG.lineID.replace('@', '')}`;
+            }
+
+            const phoneText = document.getElementById('phoneText');
+            const phoneButton = document.getElementById('phoneButton');
+            if(phoneText && phoneButton) {
+                phoneText.innerText = `โทร: ${CONTACT_CONFIG.phoneNumber}`;
+                phoneButton.href = `tel:${CONTACT_CONFIG.telLink}`;
+            }
+
+            // Update Gallery Images
+            GALLERY_IMAGES.forEach((url, index) => {
+                const imgEl = document.getElementById(`img_${index}`);
+                if (imgEl) imgEl.src = url;
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', updateUI);
+
+        // --- Admin Functions ---
+        const adminModal = document.getElementById("adminModal");
+        
+        function openAdminModal() {
+            document.getElementById("authSection").classList.remove('hidden');
+            document.getElementById("configSection").classList.add('hidden');
+            document.getElementById("adminPassword").value = "";
+            adminModal.style.display = "block";
+        }
+
+        function closeAdminModal() {
+            adminModal.style.display = "none";
+        }
+
+        function verifyAdmin() {
+            const input = document.getElementById("adminPassword").value;
+            if (input === ADMIN_CODE) {
+                document.getElementById("authSection").classList.add('hidden');
+                document.getElementById("configSection").classList.remove('hidden');
+                
+                // Load Current Contacts
+                document.getElementById("editLineID").value = CONTACT_CONFIG.lineID;
+                document.getElementById("editPhoneText").value = CONTACT_CONFIG.phoneNumber;
+                document.getElementById("editPhoneLink").value = CONTACT_CONFIG.telLink;
+
+                // Load Current Images
+                document.getElementById("editImg0").value = GALLERY_IMAGES[0];
+                document.getElementById("editImg1").value = GALLERY_IMAGES[1];
+                document.getElementById("editImg2").value = GALLERY_IMAGES[2];
+                document.getElementById("editImg3").value = GALLERY_IMAGES[3];
+            } else {
+                alert("รหัสผ่านไม่ถูกต้อง!");
+            }
+        }
+
+        function saveAdminConfig() {
+            // Save Contacts
+            CONTACT_CONFIG.lineID = document.getElementById("editLineID").value;
+            CONTACT_CONFIG.phoneNumber = document.getElementById("editPhoneText").value;
+            CONTACT_CONFIG.telLink = document.getElementById("editPhoneLink").value;
+
+            // Save Images
+            GALLERY_IMAGES[0] = document.getElementById("editImg0").value;
+            GALLERY_IMAGES[1] = document.getElementById("editImg1").value;
+            GALLERY_IMAGES[2] = document.getElementById("editImg2").value;
+            GALLERY_IMAGES[3] = document.getElementById("editImg3").value;
+            
+            updateUI();
+            closeAdminModal();
+            
+            // Success Toast
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-8 py-4 rounded-full shadow-2xl z-[200] font-bold animate-pulse';
+            toast.innerText = "อัปเดตข้อมูลและรูปภาพเรียบร้อย!";
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // --- Order Modal Functions ---
+        const orderModal = document.getElementById("orderModal");
+        
+        function openOrderModal(type) {
+            document.getElementById("modalTitle").innerHTML = `<span>🍉</span> สั่งซื้อ: ${type}`;
+            document.getElementById("orderTypeHidden").value = type;
+            orderModal.style.display = "block";
+        }
+
+        function closeOrderModal() {
+            orderModal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == orderModal) closeOrderModal();
+            if (event.target == adminModal) closeAdminModal();
+        }
+
+        function handleOrderSubmit(event) {
+            event.preventDefault();
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-2xl shadow-2xl z-[150] text-center font-bold';
+            successDiv.innerText = "สั่งซื้อสำเร็จ! เราได้รับข้อมูลแล้ว";
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+                closeOrderModal();
+                event.target.reset();
+            }, 3000);
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#' || targetId === '') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
