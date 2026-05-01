@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แตงโม อ.ชุมพลบุรี - หวาน กรอบ อร่อยจากดินทราย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; scroll-behavior: smooth; }
+        .watermelon-gradient { background: linear-gradient(135deg, #2d5a27 0%, #1e3a1a 100%); position: relative; }
+        .watermelon-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-2.5 0-5 5-5 10s2.5 10 5 10 5-5 5-10-2.5-10-5-10z' fill='%23ff4d4d' fill-opacity='0.1'/%3E%3C/svg%3E"); }
+        .hero-pattern { background-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q 25 0, 50 10 T 100 10' stroke='%23ffffff' stroke-width='2' fill='none' opacity='0.05'/%3E%3C/svg%3E"); }
+        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-blur: 4px; }
+        .modal-content { background-color: #fefefe; margin: 2% auto; padding: 2rem; border-radius: 1.5rem; max-width: 550px; width: 95%; max-height: 95vh; overflow-y: auto; }
+        .wave-bg { background-color: #1e3a1a; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%22 height='20' viewBox='0 0 1000 20'%3E%3Cpath d='M0 10 Q 250 0 500 10 T 1000 10' fill='none' stroke='%23ffffff' stroke-width='1' opacity='0.1'/%3E%3C/svg%3E"); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 watermelon-pattern">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex flex-col">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🍉</span>
+                    <span class="font-bold text-xl text-green-800 uppercase tracking-tight">Chumphon Buri Watermelon</span>
+                </div>
+                <div class="flex flex-col ml-8">
+                    <span class="text-[10px] text-green-600 font-semibold tracking-wide uppercase">Watcharaphong Pimman</span>
+                </div>
+            </div>
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#home" class="hover:text-green-600 transition">หน้าแรก</a>
+                <a href="#gallery" class="hover:text-green-600 transition">รูปภาพ</a>
+                <a href="#farmerSection" class="hover:text-green-600 transition">รายชื่อสมาชิก</a>
+                <a href="#orderOptions" class="hover:text-green-600 transition">รูปแบบการสั่งซื้อ</a>
+            </div>
+            <button onclick="openOrderFormModal('สั่งซื้อจากปุ่มเมนู')" class="bg-red-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-600 transition shadow-lg">สั่งซื้อเลย</button>
+        </div>
+    </nav>
+
+    <!-- 1. Hero Section -->
+    <section id="home" class="pt-24 pb-12 md:pt-40 md:pb-32 watermelon-gradient text-white overflow-hidden relative border-b-8 border-red-500">
+        <div class="absolute inset-0 hero-pattern"></div>
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center relative z-10">
+            <div class="md:w-1/2 text-center md:text-left">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-[1.2]">แตงโมหวาน <br><span class="text-red-400">เนื้อแดงกรอบ</span><br>จาก อ.ชุมพลบุรี</h1>
+                <p class="text-lg md:text-xl mb-8 text-gray-200">สัมผัสรสชาติอันเป็นเอกลักษณ์ ส่งตรงจากไร่สมาชิกกว่า 30 แห่ง</p>
+                <button onclick="openOrderFormModal('สั่งซื้อจากหน้าแรก')" class="bg-white text-green-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 shadow-xl">สั่งซื้อตอนนี้</button>
+            </div>
+            <div class="md:w-1/2 mt-12 md:mt-0 relative">
+                <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800" class="rounded-3xl shadow-2xl border-4 border-white/20 object-cover w-full h-[300px] md:h-[450px]">
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Gallery Section -->
+    <section id="gallery" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 text-center mb-10">
+            <h2 class="text-3xl font-bold text-gray-800">📸 บรรยากาศจากไร่</h2>
+            <p class="text-gray-500 mt-2">ภาพบรรยากาศการเก็บเกี่ยวและความสดใหม่จากสวน</p>
+        </div>
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="galleryGrid">
+                <img id="img_0" src="" class="aspect-square rounded-2xl object-cover shadow-lg hover:scale-105 transition duration-300">
+                <img id="img_1" src="" class="aspect-square rounded-2xl object-cover shadow-lg hover:scale-105 transition duration-300">
+                <img id="img_2" src="" class="aspect-square rounded-2xl object-cover shadow-lg hover:scale-105 transition duration-300">
+                <img id="img_3" src="" class="aspect-square rounded-2xl object-cover shadow-lg hover:scale-105 transition duration-300">
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Farmer Section -->
+    <section id="farmerSection" class="py-12 bg-transparent">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">👨‍🌾 รายชื่อไร่สมาชิก</h2>
+            <div id="membersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Data via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Order Options Section -->
+    <section id="orderOptions" class="py-16 wave-bg text-white">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-2">อยากลิ้มรสความหวานกรอบหรือยัง?</h2>
+            <p class="text-gray-300 mb-10 text-sm md:text-base">เลือกรูปแบบการสั่งซื้อที่ต้องการ แล้วติดต่อเราได้ทันที</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <div class="bg-red-500 p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer flex flex-col items-center justify-center space-y-3" onclick="openOrderFormModal('สั่งยกไร่')">
+                    <div class="text-3xl">🚜</div>
+                    <h3 class="font-bold text-lg">สั่งยกไร่</h3>
+                    <p class="text-[10px] opacity-80">เหมาสวน ราคาหน้าไร่</p>
+                </div>
+                <div class="bg-green-600 p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer flex flex-col items-center justify-center space-y-3" onclick="openOrderFormModal('สั่งเป็นตัน')">
+                    <div class="text-3xl">🚛</div>
+                    <h3 class="font-bold text-lg">สั่งเป็นตัน</h3>
+                    <p class="text-[10px] opacity-80">จัดส่งด้วยรถใหญ่ทั่วไทย</p>
+                </div>
+                <div class="bg-yellow-500 p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer flex flex-col items-center justify-center space-y-3 text-gray-900" onclick="openOrderFormModal('สั่งแบบเลือกขนาด')">
+                    <div class="text-3xl">📏</div>
+                    <h3 class="font-bold text-lg">สั่งแบบเลือกขนาด</h3>
+                    <p class="text-[10px] opacity-80">คัดไซส์พิเศษตามใจชอบ</p>
+                </div>
+                <div class="bg-blue-600 p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer flex flex-col items-center justify-center space-y-3" onclick="openOrderFormModal('สั่งไปขายปลีก')">
+                    <div class="text-3xl">🏢</div>
+                    <h3 class="font-bold text-lg">สั่งไปขายปลีก</h3>
+                    <p class="text-[10px] opacity-80">ราคาส่งสำหรับพ่อค้าแม่ค้า</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Contact -->
+    <footer id="contact" class="py-20 watermelon-gradient text-white">
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a id="lineButton" href="#" target="_blank" class="bg-green-500 hover:bg-green-400 text-white font-bold py-4 px-10 rounded-2xl flex items-center justify-center space-x-3 transition shadow-xl border border-white/10">
+                    <span id="lineText">LINE: -</span>
+                </a>
+                <a id="phoneButton" href="#" class="bg-white hover:bg-gray-100 text-green-900 font-bold py-4 px-10 rounded-2xl flex items-center justify-center space-x-3 transition shadow-xl">
+                    <span id="phoneText">โทร: -</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Customer Order Form Modal -->
+    <div id="orderFormModal" class="modal">
+        <div class="modal-content relative">
+            <button onclick="closeOrderFormModal()" class="absolute top-4 right-4 text-gray-400 text-2xl">&times;</button>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center shadow-md text-white text-xl">🛒</div>
+                <h3 class="text-2xl font-bold text-gray-800">ฟอร์มสั่งซื้อสินค้า</h3>
+            </div>
+            
+            <form id="googleSheetForm" class="space-y-4">
+                <p id="orderSourceText" class="text-sm font-bold text-green-600 bg-green-50 p-2 rounded-lg"></p>
+                
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">ชื่อ-นามสกุล ผู้รับ</label>
+                    <input type="text" name="name" id="custName" required placeholder="ระบุชื่อผู้รับ" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">เบอร์โทรศัพท์</label>
+                    <input type="tel" name="phone" id="custPhone" required placeholder="08x-xxx-xxxx" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">ที่อยู่ผู้สั่งซื้อ</label>
+                    <textarea name="address" id="custAddress" required rows="2" placeholder="ระบุที่อยู่ปัจจุบันของคุณ..." class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">จุดนัดรับไร่ หรือพื้นที่จุดรับ</label>
+                    <textarea name="location" id="custLocation" required rows="2" placeholder="ระบุชื่อไร่ หรือพื้นที่ที่ต้องการนัดรับผลผลิต..." class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 mb-1 block">จำนวนที่ต้องการ (กิโลกรัม/ตัน)</label>
+                    <input type="text" name="quantity" id="custQty" required placeholder="เช่น 2 ตัน หรือ 50 กิโล" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                
+                <!-- ส่วนการยินยอมเปิดเผยข้อมูล -->
+                <div class="flex items-start gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <input type="checkbox" id="consentCheck" required class="mt-1 w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                    <label for="consentCheck" class="text-xs text-gray-600 leading-relaxed">
+                        ข้าพเจ้ายินยอมเปิดเผยข้อมูลข้างต้นให้กับผู้ที่เกี่ยวข้อง เพื่อใช้ในการติดต่อประสานงาน และดำเนินการค้าขายผลผลิตเท่านั้น
+                    </label>
+                </div>
+                
+                <button type="submit" id="btnSubmitOrder" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition">
+                    <span id="submitBtnText">บันทึกข้อมูลการสั่งซื้อ</span>
+                </button>
+                <p class="text-[10px] text-center text-gray-400">* ข้อมูลจะถูกบันทึกลงในระบบ Google Sheets ของสวนโดยตรง</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Member Management Modal -->
+    <div id="ownerMemberModal" class="modal">
+        <div class="modal-content relative">
+            <button onclick="closeOwnerModal()" class="absolute top-4 right-4 text-gray-400 text-2xl">&times;</button>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center shadow-md">🔐</div>
+                <h3 class="text-2xl font-bold text-gray-800">แผงควบคุมสมาชิก</h3>
+            </div>
+            
+            <div id="ownerAuthSection" class="space-y-4">
+                <input type="password" id="ownerPassword" placeholder="ระบุรหัสผ่านสมาชิก" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-500">
+                <button onclick="verifyOwner()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl shadow-lg">เข้าสู่ระบบ</button>
+            </div>
+
+            <div id="ownerEditSection" class="hidden space-y-4">
+                <div class="bg-green-50 p-4 rounded-2xl border border-green-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <label class="block text-sm font-bold text-green-800 uppercase tracking-wide">จัดการข้อมูลสมาชิก</label>
+                        <button id="btnDeleteInfo" onclick="deleteMemberData()" class="text-red-500 text-sm font-semibold hover:underline hidden">ล้างข้อมูล (ลบ)</button>
+                    </div>
+                    
+                    <select id="selectMemberSlot" class="w-full p-3 border rounded-xl bg-white mb-4" onchange="loadMemberDataToForm()">
+                        <option value="">-- เลือกตำแหน่งสมาชิก (1-30) --</option>
+                    </select>
+
+                    <div id="editFormFields" class="space-y-4 hidden">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 mb-1 block">ชื่อเจ้าของไร่</label>
+                            <input type="text" id="ownerEditName" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-600">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 mb-1 block">เบอร์โทรติดต่อ</label>
+                            <input type="text" id="ownerEditPhone" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-600">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 mb-1 block">จำนวนผลิต</label>
+                            <input type="text" id="ownerEditQty" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-600">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 mb-1 block">URL รูปภาพ (ถ้ามี)</label>
+                            <input type="text" id="ownerEditAvatar" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-600">
+                        </div>
+                        <button onclick="saveMemberData()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-green-700 transition">บันทึกข้อมูล</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content relative">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-400 text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">ตั้งค่าส่วนกลาง (Admin)</h3>
+            <div id="authSection" class="space-y-4">
+                <input type="password" id="adminPassword" placeholder="Admin Password" class="w-full p-3 border rounded-xl">
+                <button onclick="verifyAdmin()" class="w-full bg-gray-800 text-white font-bold py-3 rounded-xl">เข้าสู่ระบบ</button>
+            </div>
+            <div id="configSection" class="hidden space-y-4">
+                <input type="text" id="editLineID" placeholder="Line ID" class="w-full p-2 border rounded-lg">
+                <input type="text" id="editPhoneText" placeholder="เบอร์โทรแสดง" class="w-full p-2 border rounded-lg">
+                <input type="text" id="editPhoneLink" placeholder="เบอร์โทรลิงก์" class="w-full p-2 border rounded-lg">
+                <hr>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="editImg0" class="p-2 border rounded-lg text-xs" placeholder="URL รูป 1">
+                    <input type="text" id="editImg1" class="p-2 border rounded-lg text-xs" placeholder="URL รูป 2">
+                    <input type="text" id="editImg2" class="p-2 border rounded-lg text-xs" placeholder="URL รูป 3">
+                    <input type="text" id="editImg3" class="p-2 border rounded-lg text-xs" placeholder="URL รูป 4">
+                </div>
+                <button onclick="saveAdminConfig()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">บันทึก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating UI -->
+    <div class="fixed bottom-4 right-4 flex flex-col gap-2 z-40">
+        <button onclick="openOwnerModal()" class="w-12 h-12 bg-green-500 text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition">👨‍🌾</button>
+        <button onclick="openAdminModal()" class="w-12 h-12 bg-gray-800 text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition">⚙️</button>
+    </div>
+
+    <script id="data-script">
+        /**
+         * อัปเดต URL ใหม่สำหรับ Google Sheet Web App เรียบร้อยแล้ว
+         */
+        const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwKNEaBPgZtwIB-XBQrHOZwMCJSSsfNwcEfbPgIImKIdFDXlCEgA5ubsBRbQ5yBbq7V/exec"; 
+
+        let APP_DATA = {
+            farmers: [], 
+            contact: {
+                lineID: "@chumphonburi_wm",
+                phoneNumber: "080-123-4567",
+                telLink: "0801234567"
+            },
+            gallery: [
+                "https://scontent.fbkk3-1.fna.fbcdn.net/v/t39.30808-6/687215159_26617897217865713_6992575283867406431_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeEr5PpRNgw51NtgoRJ-Bqu9yUhppTfSnOPJSGmlN9Kc47sCLsGb1AcmZSm3P03OGO32RQilQAVgoalG86MzJ-CS&_nc_ohc=lLD8_oTjzWAQ7kNvwGEcq2k&_nc_oc=Adq7PBdoIdXW5VwHGU6DKRuIvx1HiD6CxwuUqulPjv8VgMkAoCZgIb2h31yfyPbDt4Y&_nc_zt=23&_nc_ht=scontent.fbkk3-1.fna&_nc_gid=ctTFaiRIJGj9s7fCN9zhDA&_nc_ss=7b2a8&oh=00_Af5u27kemhYQtEW8SlgZmO6pOIJHATIHG5ufoIAjEGoJGw&oe=69FA39ED",
+                "https://scontent.fbkk3-1.fna.fbcdn.net/v/t39.30808-6/684391894_26617896967865738_5881537941579436789_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeHn3kxlKELazGXNuo55806xjBgUVcyT2qyMGBRVzJParBOoW28McPPf7WrkvfRkrbj0G3RrvyCLgEojCuenZ5fx&_nc_ohc=jFsILBg31WgQ7kNvwHJHgbE&_nc_oc=Adp1IX0ikfljJdvVXKaJr9lO7lEJ_mHIQOKR5X8baf1U5yChk5zHwf0M4Pp2VGayFw4&_nc_zt=23&_nc_ht=scontent.fbkk3-1.fna&_nc_gid=cqiWQeQK1fhqCivm7rRDFQ&_nc_ss=7b2a8&oh=00_Af7BHD3Yyl2c8hkZnWSiKprEDWHssHRjeeEoz9_vEAOOUQ&oe=69FA5815",
+                "https://scontent.fbkk3-1.fna.fbcdn.net/v/t39.30808-6/688051269_26617897374532364_7988130739718369326_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeELZg-a5pcWZAp1P0pWdT_UrEQLDgJnSI6sRAsOAmdIjobP-h8zH-SvRvUPsXWOA732yiMIL8D6DKHCdSdA9Kd1&_nc_ohc=HMiuJrzEpn0Q7kNvwEei9ia&_nc_oc=AdqYwkluq2pvzhn-hpRg0Zy36zkiz70JeNu5sLO8fRwMHfZSAY8oIm8iZD50IToTbHY&_nc_zt=23&_nc_ht=scontent.fbkk3-1.fna&_nc_gid=vTIaoOcRLLrKI71A4YbGgw&_nc_ss=7b2a8&oh=00_Af5mPoMND41XVmm1NO9ZK41DgH8Wgv4WalbJzVdN4DyVAg&oe=69FA5DFB",
+                "https://scontent.fbkk3-1.fna.fbcdn.net/v/t39.30808-6/684296795_26617897384532363_1976760141370428544_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeE_faXZvIFmfVB4p0UXAR4OJe9VRC5EJ40l71VELkQnjZ5AofGUP3UOWpKSiUC0259Lz4qfj9evIcWT7Jl1JuFH&_nc_ohc=ZScwA-YLwSgQ7kNvwHHFaPd&_nc_oc=Adqy6uBvNSf55Albl9qgygwrH_1SQfV3LyLGTAt0uhAuhcxt8-JLgoFe16d4HWcCzHQ&_nc_zt=23&_nc_ht=scontent.fbkk3-1.fna&_nc_gid=E7WXmhh9zqsI2_7Bq_Da2w&_nc_ss=7b2a8&oh=00_Af6OlY1Hih2-NE0yH9zIGA4lxxjw0wuPAVJ7XIyp0JfhbQ&oe=69FA52E6"
+            ]
+        };
+
+        const ADMIN_CODE = "132020";
+        const OWNER_CODE = "5555";
+        let CURRENT_ORDER_TYPE = "";
+
+        function updateUI() {
+            const grid = document.getElementById('membersGrid');
+            grid.innerHTML = "";
+            const members = APP_DATA.farmers.sort((a,b) => a.id - b.id);
+            
+            if(members.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400 border-2 border-dashed rounded-3xl">ยังไม่มีรายชื่อสมาชิก</div>`;
+            } else {
+                members.forEach(f => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-2xl border card-shadow flex flex-col items-center text-center";
+                    card.innerHTML = `
+                        <div class="w-24 h-24 rounded-full bg-green-50 mb-4 overflow-hidden flex items-center justify-center border-2 border-white shadow-md">
+                            ${f.avatar ? `<img src="${f.avatar}" class="w-full h-full object-cover">` : `<span class="text-4xl">🧺</span>`}
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-lg">${f.name}</h4>
+                        <p class="text-green-600 font-bold mb-4">ผลผลิต: ${f.quantity}</p>
+                        <div class="flex flex-col gap-2 w-full">
+                            <button onclick="openOrderFormModal('สั่งจากไร่: ${f.name}')" class="w-full py-3 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition shadow-sm">🛒 สั่งซื้อทันที</button>
+                            <a href="tel:${f.phone}" class="w-full py-2 bg-gray-50 rounded-xl text-xs font-bold hover:bg-green-50 border transition flex items-center justify-center gap-2">📞 โทร: ${f.phone}</a>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            document.getElementById('lineText').innerText = `LINE: ${APP_DATA.contact.lineID}`;
+            document.getElementById('lineButton').href = `https://line.me/ti/p/~${APP_DATA.contact.lineID.replace('@', '')}`;
+            document.getElementById('phoneText').innerText = `โทร: ${APP_DATA.contact.phoneNumber}`;
+            document.getElementById('phoneButton').href = `tel:${APP_DATA.contact.telLink}`;
+            
+            APP_DATA.gallery.forEach((url, i) => { 
+                const img = document.getElementById(`img_${i}`);
+                if(img) img.src = url; 
+            });
+
+            const select = document.getElementById('selectMemberSlot');
+            const currentSelected = select.value;
+            select.innerHTML = `<option value="">-- เลือกตำแหน่งสมาชิก (1-30) --</option>`;
+            for(let i=1; i<=30; i++) {
+                const f = APP_DATA.farmers.find(x => x.id === i);
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `ลำดับที่ ${i} ${f ? `(${f.name})` : '(ว่าง)'}`;
+                select.appendChild(opt);
+            }
+            select.value = currentSelected;
+        }
+
+        function loadMemberDataToForm() {
+            const id = parseInt(document.getElementById('selectMemberSlot').value);
+            const form = document.getElementById('editFormFields');
+            const btnDel = document.getElementById('btnDeleteInfo');
+            if(!id) { form.classList.add('hidden'); btnDel.classList.add('hidden'); return; }
+            form.classList.remove('hidden');
+            const f = APP_DATA.farmers.find(x => x.id === id);
+            if(f) {
+                document.getElementById('ownerEditName').value = f.name || "";
+                document.getElementById('ownerEditPhone').value = f.phone || "";
+                document.getElementById('ownerEditQty').value = f.quantity || "";
+                document.getElementById('ownerEditAvatar').value = f.avatar || "";
+                btnDel.classList.remove('hidden');
+            } else {
+                document.getElementById('ownerEditName').value = "";
+                document.getElementById('ownerEditPhone').value = "";
+                document.getElementById('ownerEditQty').value = "";
+                document.getElementById('ownerEditAvatar').value = "";
+                btnDel.classList.add('hidden');
+            }
+        }
+
+        function saveMemberData() {
+            const id = parseInt(document.getElementById('selectMemberSlot').value);
+            const name = document.getElementById('ownerEditName').value.trim();
+            const phone = document.getElementById('ownerEditPhone').value.trim();
+            const qty = document.getElementById('ownerEditQty').value.trim();
+            const avatar = document.getElementById('ownerEditAvatar').value.trim();
+            if(!id) { alert("กรุณาเลือกตำแหน่งสมาชิกก่อนบันทึก"); return; }
+            if(!name) { alert("กรุณาระบุชื่อเจ้าของไร่"); return; }
+            const memberObj = { id, name, phone, quantity: qty, avatar };
+            const index = APP_DATA.farmers.findIndex(f => f.id === id);
+            if(index !== -1) APP_DATA.farmers[index] = memberObj;
+            else APP_DATA.farmers.push(memberObj);
+            updateUI();
+            alert(`บันทึกข้อมูลสมาชิกตำแหน่งที่ ${id} สำเร็จ!`);
+        }
+
+        function deleteMemberData() {
+            const id = parseInt(document.getElementById('selectMemberSlot').value);
+            if(!id) return;
+            if(confirm(`คุณต้องการล้างข้อมูลสมาชิกตำแหน่งที่ ${id} ใช่หรือไม่?`)) {
+                APP_DATA.farmers = APP_DATA.farmers.filter(f => f.id !== id);
+                updateUI();
+                loadMemberDataToForm();
+            }
+        }
+
+        function openOwnerModal() { 
+            document.getElementById('ownerPassword').value = "";
+            document.getElementById('ownerAuthSection').classList.remove('hidden'); 
+            document.getElementById('ownerEditSection').classList.add('hidden'); 
+            document.getElementById('ownerMemberModal').style.display = "block"; 
+        }
+        function closeOwnerModal() { document.getElementById('ownerMemberModal').style.display = "none"; }
+        function verifyOwner() { 
+            if(document.getElementById('ownerPassword').value === OWNER_CODE) {
+                document.getElementById('ownerAuthSection').classList.add('hidden');
+                document.getElementById('ownerEditSection').classList.remove('hidden');
+                updateUI(); 
+            } else { alert("รหัสผ่านไม่ถูกต้อง"); }
+        }
+
+        function openOrderFormModal(type) {
+            CURRENT_ORDER_TYPE = type;
+            document.getElementById('orderSourceText').innerText = `📦 รูปแบบ: ${type}`;
+            document.getElementById('orderFormModal').style.display = "block";
+            document.getElementById('consentCheck').checked = false;
+        }
+        function closeOrderFormModal() {
+            document.getElementById('orderFormModal').style.display = "none";
+            document.getElementById('googleSheetForm').reset();
+        }
+
+        // --- ระบบส่งข้อมูลเข้า GOOGLE SHEETS ---
+        document.getElementById('googleSheetForm').onsubmit = async function(e) {
+            e.preventDefault(); 
+
+            if(!document.getElementById('consentCheck').checked) {
+                alert("กรุณากดยินยอมเปิดเผยข้อมูลเพื่อดำเนินการต่อ");
+                return;
+            }
+
+            const btn = document.getElementById('btnSubmitOrder');
+            const btnText = document.getElementById('submitBtnText');
+            
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+            btnText.innerText = "กำลังส่งข้อมูล...";
+
+            // สร้าง URL Parameter สำหรับส่งแบบ GET/POST พื้นฐาน
+            const params = new URLSearchParams();
+            params.append('timestamp', new Date().toLocaleString('th-TH'));
+            params.append('type', CURRENT_ORDER_TYPE);
+            params.append('name', document.getElementById('custName').value);
+            params.append('phone', document.getElementById('custPhone').value);
+            params.append('address', document.getElementById('custAddress').value);
+            params.append('location', document.getElementById('custLocation').value);
+            params.append('quantity', document.getElementById('custQty').value);
+            params.append('consent', 'ยินยอม');
+
+            try {
+                // ส่งข้อมูลไปยัง Google Apps Script
+                await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // สำคัญสำหรับ Apps Script
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params
+                });
+
+                alert("✅ บันทึกข้อมูลการสั่งซื้อลงใน Google Sheets เรียบร้อยแล้ว!\nเราจะติดต่อกลับหาคุณโดยเร็วที่สุด");
+                closeOrderFormModal();
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
+                btnText.innerText = "บันทึกข้อมูลการสั่งซื้อ";
+            }
+        };
+
+        function openAdminModal() { document.getElementById('adminModal').style.display = "block"; }
+        function closeAdminModal() { document.getElementById('adminModal').style.display = "none"; }
+        function verifyAdmin() { if(document.getElementById('adminPassword').value === ADMIN_CODE) { document.getElementById('authSection').classList.add('hidden'); document.getElementById('configSection').classList.remove('hidden'); } }
+        function saveAdminConfig() {
+            APP_DATA.contact = { 
+                lineID: document.getElementById('editLineID').value || APP_DATA.contact.lineID, 
+                phoneNumber: document.getElementById('editPhoneText').value || APP_DATA.contact.phoneNumber, 
+                telLink: document.getElementById('editPhoneLink').value || APP_DATA.contact.telLink 
+            };
+            for(let i=0; i<4; i++) {
+                const val = document.getElementById(`editImg${i}`).value;
+                if(val) APP_DATA.gallery[i] = val;
+            }
+            updateUI();
+            alert("อัปเดตเรียบร้อย");
+            closeAdminModal();
+        }
+
+        window.onload = updateUI;
+    </script>
+</body>
+</html>
