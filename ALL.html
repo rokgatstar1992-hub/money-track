@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการเงินและบัญชีธนาคาร - นายต้องตื่นตลอด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background-color: #f0f4f8;
+            background-image: linear-gradient(rgba(230, 245, 230, 0.85), rgba(200, 230, 200, 0.85)), url('https://images.unsplash.com/photo-1502920514313-52581002a659?q=80&w=2067&auto=format&fit=crop');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .glass-card { background: rgba(255, 255, 255, 0.95); border-radius: 16px; box-shadow: 0 4px 20px rgba(31, 38, 135, 0.05); border: 1px solid rgba(255, 255, 255, 0.18); }
+        .input-field { background: #fdfdfd; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px; width: 100%; outline: none; transition: all 0.3s; font-size: 0.8rem; }
+        .input-field:focus { border-color: #4299e1; box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1); }
+        .btn-primary { background: #2d3748; color: white; border-radius: 8px; padding: 10px; font-weight: 500; transition: all 0.3s; width: 100%; }
+        .btn-primary:hover { background: #1a202c; }
+        .bank-card { border-left: 6px solid #cbd5e0; transition: border-color 0.5s ease; }
+        
+        .color-bank-1 { border-left-color: #118b44 !important; } /* KBANK */
+        .color-bank-2 { border-left-color: #4e2e7f !important; } /* SCB */
+        .color-bank-3 { border-left-color: #00a1e0 !important; } /* KTB */
+        .color-crypto-btc { border-left-color: #f7931a !important; }
+        .color-crypto-eth { border-left-color: #627eea !important; }
+        .color-crypto-cgpt { border-left-color: #00f0ff !important; }
+
+        .crypto-stat-card { border-radius: 12px; padding: 10px; border: 1px solid rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .crypto-stat-card:hover { transform: translateY(-2px); }
+        
+        /* เพิ่มสีพื้นหลังจางๆ ให้กับกระดานเหรียญ */
+        .bg-btc { background: #fffaf0; border-bottom: 3px solid #f7931a; }
+        .bg-eth { background: #f0f5ff; border-bottom: 3px solid #627eea; }
+        .bg-cgpt { background: #f0ffff; border-bottom: 3px solid #00f0ff; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .glass-card { box-shadow: none !important; border: 1px solid #eee !important; background: white !important; }
+        }
+    </style>
+</head>
+<body class="p-2 md:p-4">
+    <div class="max-w-5xl mx-auto" id="main-content">
+        <!-- แถบเครื่องมือด้านบน -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-2 no-print gap-2">
+            <p class="text-slate-500 text-[10px] text-center sm:text-left leading-tight" id="ui-subtitle">
+                <span class="select-none pointer-events-none block sm:inline">Prepared by Mr. Watcharapong Pimman | </span>"นายต้องตื่นตลอด เพื่อความมั่งคั่ง"
+            </p>
+            <div class="flex gap-2 items-center">
+                <select id="lang-select" onchange="changeLanguage()" class="bg-white/90 border border-gray-200 rounded-full px-3 py-1 text-[10px] font-medium outline-none shadow-sm">
+                    <option value="th">🇹🇭 TH</option>
+                    <option value="en">🇺🇸 EN</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ส่วนหัว -->
+        <div class="flex flex-col items-center mb-6 border-b border-white/50 pb-4 gap-3">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800 text-center" id="ui-title">✨ ระบบจัดการเงินและบัญชีธนาคาร</h1>
+            <div class="flex gap-2 justify-center no-print w-full">
+                <button onclick="window.print()" class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-[11px] font-bold transition-all shadow-lg flex-1 max-w-[120px]">PDF</button>
+                <button onclick="exportToCSV()" class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-full text-[11px] font-bold transition-all shadow-lg flex-1 max-w-[120px]">CSV</button>
+            </div>
+        </div>
+
+        <!-- ยอดเงินในบัญชีและคริปโต -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-4">
+            <script>
+                const defaultBanks = ["กสิกร (KBANK)", "ไทยพาณิชย์ (SCB)", "กรุงไทย (KTB)"];
+                for(let i=1; i<=3; i++) {
+                    document.write(`
+                        <div id="card-bank-${i}" class="glass-card bank-card color-bank-${i} p-2.5">
+                            <input type="text" id="name-bank-${i}" class="font-semibold text-[9px] bg-transparent border-b border-dashed border-gray-100 outline-none w-full mb-0.5" value="${defaultBanks[i-1]}" onchange="updateUI()">
+                            <p class="text-[11px] mt-1 text-slate-800 font-bold text-right">฿ <span id="display-bank-${i}">0</span></p>
+                        </div>
+                    `);
+                }
+            </script>
+            
+            <!-- BTC & ETH -->
+            <script>
+                const cryptoLabels = ["เหรียญ BTC", "เหรียญ ETH"];
+                const cryptoKeys = ["btc", "eth"];
+                for(let i=4; i<=5; i++) {
+                    const key = cryptoKeys[i-4];
+                    document.write(`
+                        <div id="card-bank-${i}" class="glass-card bank-card color-crypto-${key} p-2.5">
+                            <input type="text" id="name-bank-${i}" class="font-semibold text-[9px] bg-transparent border-b border-dashed border-gray-100 outline-none w-full mb-0.5" value="${cryptoLabels[i-4]}" onchange="updateUI()">
+                            <div class="flex items-center gap-1 mt-1">
+                                <span class="text-[7px] text-gray-400">Qty:</span>
+                                <input type="number" id="qty-crypto-${key}" class="w-full text-[9px] bg-gray-50 rounded px-1 outline-none font-bold" value="0" step="any" onchange="updateUI()">
+                            </div>
+                            <p class="text-[10px] mt-1 text-slate-800 font-bold text-right">฿ <span id="display-bank-${i}">0</span></p>
+                        </div>
+                    `);
+                }
+            </script>
+
+            <!-- CGPT -->
+            <div id="card-bank-6" class="glass-card bank-card color-crypto-cgpt p-2.5">
+                <input type="text" id="name-bank-6" class="font-semibold text-[9px] bg-transparent border-b border-dashed border-gray-100 outline-none w-full mb-0.5" value="เหรียญ CGPT" onchange="updateUI()">
+                <div class="flex items-center gap-1 mt-1">
+                    <span class="text-[7px] text-gray-400">Qty:</span>
+                    <input type="number" id="qty-crypto-cgpt" class="w-full text-[9px] bg-gray-50 rounded px-1 outline-none font-bold" value="0" step="any" onchange="updateUI()">
+                </div>
+                <div class="flex items-center gap-1 mt-1 no-print">
+                    <span class="text-[7px] text-blue-500">฿/Unit:</span>
+                    <input type="number" id="price-manual-cgpt" class="w-full text-[9px] bg-blue-50 rounded px-1 outline-none font-bold text-blue-600" value="0" step="any" onchange="updateUI()">
+                </div>
+                <p class="text-[10px] mt-1 text-slate-800 font-bold text-right">฿ <span id="display-bank-6">0</span></p>
+            </div>
+        </div>
+
+        <!-- ส่วนสรุปกลาง -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4">
+            <div class="lg:col-span-3 space-y-2">
+                <div class="glass-card p-3">
+                    <div class="flex justify-between text-blue-600 font-medium text-[10px] items-center">
+                        <span id="ui-saving-goal">เป้าออม</span>
+                        <input type="number" id="saving-goal" class="w-20 text-right outline-none font-bold text-xs bg-transparent" value="0" onchange="updateUI()">
+                    </div>
+                </div>
+                <div class="glass-card p-3 border-t-4 border-orange-400">
+                    <p class="text-[9px] text-orange-600 font-bold uppercase mb-2 text-center" id="ui-daily-title">สรุปรายรับรายจ่ายวันนี้</p>
+                    <div class="flex flex-col gap-1 text-[10px]">
+                        <div class="flex justify-between"><span id="ui-daily-inc-label">รับวันนี้</span><span class="font-bold text-green-700">฿ <span id="daily-income-sum">0</span></span></div>
+                        <div class="flex justify-between"><span id="ui-daily-exp-label">จ่ายวันนี้</span><span class="font-bold text-red-600">฿ <span id="daily-expense-sum">0</span></span></div>
+                        <div class="border-t mt-1 pt-1 flex justify-between font-bold"><span id="ui-daily-net-label">สุทธิ</span><span class="text-orange-500">฿ <span id="daily-net-sum">0</span></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ส่วนราคาคริปโต (พร้อมสีแยกเหรียญ) -->
+            <div class="lg:col-span-9 glass-card p-3 border-t-4 border-yellow-500">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-2">
+                    <h2 class="font-bold text-yellow-700 text-[10px]" id="ui-crypto-title">📈 กระดานมูลค่าเหรียญคริปโต (Real-time)</h2>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded flex-1 text-center">รวมพอร์ตคริปโต: ฿ <span id="crypto-portfolio-sum">0</span></span>
+                        <span class="text-[9px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded flex-1 text-center border border-indigo-100">มูลค่าสินทรัพย์รวม (เงิน+เหรียญ): ฿ <span id="total-asset-sum">0</span></span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+                    <!-- BTC Card -->
+                    <div class="crypto-stat-card bg-btc shadow-sm">
+                        <p class="text-[8px] text-orange-600 font-bold uppercase">Bitcoin (BTC)</p>
+                        <p class="text-sm font-bold text-slate-800" id="btc-price">...</p>
+                        <p class="text-[9px]" id="btc-change">0%</p>
+                    </div>
+                    <!-- ETH Card -->
+                    <div class="crypto-stat-card bg-eth shadow-sm">
+                        <p class="text-[8px] text-blue-700 font-bold uppercase">Ethereum (ETH)</p>
+                        <p class="text-sm font-bold text-slate-800" id="eth-price">...</p>
+                        <p class="text-[9px]" id="eth-change">0%</p>
+                    </div>
+                    <!-- CGPT Card -->
+                    <div class="crypto-stat-card bg-cgpt shadow-sm">
+                        <p class="text-[8px] text-cyan-600 font-bold uppercase">ChainGPT (CGPT)</p>
+                        <p class="text-sm font-bold text-slate-800" id="cgpt-price-display">฿0</p>
+                        <p class="text-[9px] text-slate-400 italic">Manual Price</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- บันทึกและประวัติ -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4">
+            <div class="lg:col-span-3 glass-card p-3 border-l-4 border-green-500 no-print">
+                <h2 class="font-bold text-slate-700 mb-2 text-[10px]" id="ui-record-title">📝 บันทึกรายการ</h2>
+                <div class="space-y-1.5">
+                    <div class="flex gap-1 mb-1">
+                        <button onclick="setTxType('income')" id="type-inc" class="flex-1 py-1 text-[9px] rounded-md bg-white text-green-600 font-bold border-2 border-green-500">รายรับ (+)</button>
+                        <button onclick="setTxType('expense')" id="type-exp" class="flex-1 py-1 text-[9px] rounded-md bg-red-500 text-white font-bold border-2 border-red-500">รายจ่าย (-)</button>
+                    </div>
+                    <input type="date" id="tx-date" class="input-field text-[10px]">
+                    <select id="tx-bank" class="input-field text-[10px]"></select>
+                    <input type="text" id="tx-note" placeholder="รายการ / บันทึก" class="input-field text-[10px]">
+                    <input type="number" id="tx-amount" placeholder="จำนวนเงิน (บาท)" class="input-field font-bold text-sm">
+                    <button onclick="addTransaction()" class="btn-primary py-1.5 text-[10px] mt-2" id="ui-btn-save">บันทึก</button>
+                    <button onclick="clearData()" class="w-full text-[8px] text-gray-300 mt-2 hover:text-red-500" id="ui-btn-clear">ล้างข้อมูลทั้งหมด</button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-9 glass-card p-3 overflow-hidden">
+                <h2 class="font-bold text-slate-700 mb-1.5 text-[10px]" id="ui-history-title">รายการเดินบัญชี</h2>
+                <div class="overflow-x-auto max-h-80">
+                    <table class="w-full text-left text-[10px]">
+                        <thead><tr class="text-gray-400 text-[8px] border-b"><th id="ui-th-date">วันที่</th><th id="ui-th-bank">บัญชี</th><th id="ui-th-note">รายการ</th><th class="text-right" id="ui-th-amount">จำนวน</th><th class="text-center no-print">ลบ</th></tr></thead>
+                        <tbody id="tx-history"></tbody>
+                    </table>
+                </div>
+                <div class="mt-2 border-t pt-2 flex justify-between items-center">
+                    <span class="text-[8px] text-gray-400 font-bold" id="ui-remaining-label">งบสุทธิคงเหลือ</span>
+                    <span class="text-lg font-bold" id="remaining-pool-container">฿ <span id="remaining-pool">0</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-3 mb-4">
+            <h2 class="font-bold text-slate-700 mb-2 text-[10px]" id="ui-monthly-title">📊 สรุปยอดสุทธิรายเดือน</h2>
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-1.5" id="monthly-summary-grid"></div>
+        </div>
+
+        <p class="text-center text-[9px] text-gray-400 mt-2">บันทึกโดย "นายต้องตื่นตลอด" | พิมพ์เมื่อ: <span id="print-date"></span></p>
+    </div>
+
+    <script>
+        let transactions = JSON.parse(localStorage.getItem('my_money_txs')) || [];
+        let currentTxType = 'expense';
+        let currentLang = localStorage.getItem('my_money_lang') || 'th';
+        
+        const cryptoMeta = {
+            btc: { price: 0, change: 0 },
+            eth: { price: 0, change: 0 }
+        };
+
+        const i18n = {
+            th: {
+                title: "✨ ระบบจัดการเงินและบัญชีธนาคาร",
+                savingGoal: "เป้าออม", dailyTitle: "สรุปรายรับรายจ่ายวันนี้", dailyInc: "รับวันนี้", dailyExp: "จ่ายวันนี้", dailyNet: "สุทธิ", debtsTitle: "กระดานคริปโต (Real-time)",
+                recordTitle: "📝 บันทึกรายการ", historyTitle: "รายการเดินบัญชี", btnSave: "บันทึกรายการ", btnClear: "ล้าง", thDate: "วันที่", thBank: "บัญชี", thNote: "รายการ", thAmount: "จำนวน",
+                remainingLabel: "งบสุทธิคงเหลือ (หักลบเป้าออม)", monthlyTitle: "📊 สรุปยอดสุทธิรายเดือน", months: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]
+            },
+            en: {
+                title: "✨ Money Management System",
+                savingGoal: "Saving Goal", dailyTitle: "Today's Summary", dailyInc: "Income", dailyExp: "Expense", dailyNet: "Net", debtsTitle: "Crypto (Real-time)",
+                recordTitle: "📝 Record", historyTitle: "Statement History", btnSave: "Save Record", btnClear: "Clear", thDate: "Date", thBank: "Bank", thNote: "Note", thAmount: "Amount",
+                remainingLabel: "Net Remaining (Minus Goal)", monthlyTitle: "Monthly Summary", months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            }
+        };
+
+        function changeLanguage() {
+            currentLang = document.getElementById('lang-select').value;
+            localStorage.setItem('my_money_lang', currentLang);
+            updateUI();
+        }
+
+        async function updateCryptoPrices() {
+            try {
+                const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=thb&include_24hr_change=true');
+                const data = await res.json();
+                if (data.bitcoin) {
+                    cryptoMeta.btc.price = data.bitcoin.thb;
+                    cryptoMeta.btc.change = data.bitcoin.thb_24h_change;
+                }
+                if (data.ethereum) {
+                    cryptoMeta.eth.price = data.ethereum.thb;
+                    cryptoMeta.eth.change = data.ethereum.thb_24h_change;
+                }
+                updateUI();
+            } catch(e) { console.log("Price fetch error"); }
+        }
+
+        function saveSettings() {
+            const goal = parseFloat(document.getElementById('saving-goal').value) || 0;
+            const bankNames = [];
+            for(let i=1; i<=6; i++) bankNames.push(document.getElementById(`name-bank-${i}`).value);
+            
+            const qtys = {
+                btc: document.getElementById('qty-crypto-btc').value,
+                eth: document.getElementById('qty-crypto-eth').value,
+                cgpt: document.getElementById('qty-crypto-cgpt').value
+            };
+
+            const cgptManualPrice = document.getElementById('price-manual-cgpt').value;
+
+            localStorage.setItem('my_money_settings_v6', JSON.stringify({
+                saving: goal,
+                bankNames,
+                qtys,
+                cgptPrice: cgptManualPrice
+            }));
+        }
+
+        function updateUI() {
+            const lang = i18n[currentLang];
+            document.getElementById('ui-title').innerText = lang.title;
+            document.getElementById('ui-saving-goal').innerText = lang.savingGoal;
+            document.getElementById('ui-daily-title').innerText = lang.dailyTitle;
+            document.getElementById('ui-daily-inc-label').innerText = lang.dailyInc;
+            document.getElementById('ui-daily-exp-label').innerText = lang.dailyExp;
+            document.getElementById('ui-daily-net-label').innerText = lang.dailyNet;
+            document.getElementById('ui-crypto-title').innerText = lang.debtsTitle;
+            document.getElementById('ui-record-title').innerText = lang.recordTitle;
+            document.getElementById('ui-history-title').innerText = lang.historyTitle;
+            document.getElementById('ui-btn-save').innerText = lang.btnSave;
+            document.getElementById('ui-th-date').innerText = lang.thDate;
+            document.getElementById('ui-th-bank').innerText = lang.thBank;
+            document.getElementById('ui-th-note').innerText = lang.thNote;
+            document.getElementById('ui-th-amount').innerText = lang.thAmount;
+            document.getElementById('ui-remaining-label').innerText = lang.remainingLabel;
+            document.getElementById('ui-monthly-title').innerText = lang.monthlyTitle;
+
+            const bankSelect = document.getElementById('tx-bank');
+            const curBank = bankSelect.value; bankSelect.innerHTML = '';
+            
+            let totalBankCash = 0;
+            // อัปเดตยอดเงินธนาคาร
+            for(let i=1; i<=3; i++) {
+                const name = document.getElementById(`name-bank-${i}`).value;
+                const opt = document.createElement('option'); opt.value = `bank-${i}`; opt.textContent = name; bankSelect.appendChild(opt);
+                const val = transactions.filter(t => t.bank === `bank-${i}`).reduce((s, t) => t.type === 'income' ? s + t.amount : s - t.amount, 0);
+                totalBankCash += val;
+                document.getElementById(`display-bank-${i}`).innerText = val.toLocaleString();
+            }
+
+            let cryptoTotalValue = 0;
+            // คำนวณ BTC / ETH
+            const keys = ["btc", "eth"];
+            keys.forEach((key, idx) => {
+                const qty = parseFloat(document.getElementById(`qty-crypto-${key}`).value) || 0;
+                const val = qty * cryptoMeta[key].price;
+                cryptoTotalValue += val;
+                document.getElementById(`display-bank-${idx+4}`).innerText = val.toLocaleString(undefined, {minimumFractionDigits: 2});
+                document.getElementById(`${key}-price`).innerText = "฿" + cryptoMeta[key].price.toLocaleString();
+                const cEl = document.getElementById(`${key}-change`);
+                cEl.innerText = (cryptoMeta[key].change >= 0 ? "+" : "") + cryptoMeta[key].change.toFixed(2) + "%";
+                cEl.style.color = cryptoMeta[key].change >= 0 ? '#22c55e' : '#ef4444';
+            });
+
+            // คำนวณ CGPT
+            const cgptQty = parseFloat(document.getElementById('qty-crypto-cgpt').value) || 0;
+            const cgptPrice = parseFloat(document.getElementById('price-manual-cgpt').value) || 0;
+            const cgptVal = cgptQty * cgptPrice;
+            cryptoTotalValue += cgptVal;
+            document.getElementById('display-bank-6').innerText = cgptVal.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('cgpt-price-display').innerText = "฿" + cgptPrice.toLocaleString();
+
+            if(curBank && [...bankSelect.options].some(o => o.value === curBank)) bankSelect.value = curBank;
+
+            // สรุปยอดต่างๆ
+            document.getElementById('crypto-portfolio-sum').innerText = cryptoTotalValue.toLocaleString();
+            document.getElementById('total-asset-sum').innerText = (totalBankCash + cryptoTotalValue).toLocaleString();
+
+            const goal = parseFloat(document.getElementById('saving-goal').value) || 0;
+            const netPool = (totalBankCash + cryptoTotalValue) - goal;
+            
+            document.getElementById('remaining-pool').innerText = netPool.toLocaleString();
+            document.getElementById('remaining-pool-container').style.color = netPool < 0 ? '#ef4444' : '#10b981';
+            
+            const today = new Date().toISOString().split('T')[0];
+            const dInc = transactions.filter(t => t.date === today && t.type === 'income').reduce((s, t) => s + t.amount, 0);
+            const dExp = transactions.filter(t => t.date === today && t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+            document.getElementById('daily-income-sum').innerText = dInc.toLocaleString();
+            document.getElementById('daily-expense-sum').innerText = dExp.toLocaleString();
+            document.getElementById('daily-net-sum').innerText = (dInc - dExp).toLocaleString();
+
+            renderHistory();
+            renderMonthly();
+            document.getElementById('print-date').innerText = new Date().toLocaleString();
+            saveSettings();
+        }
+
+        function addTransaction() {
+            const date = document.getElementById('tx-date').value || new Date().toISOString().split('T')[0];
+            const bank = document.getElementById('tx-bank').value;
+            const note = document.getElementById('tx-note').value;
+            const amt = parseFloat(document.getElementById('tx-amount').value);
+            if(!amt) return;
+            transactions.unshift({ date, bank, note: note || (currentTxType === 'income' ? 'รายรับ' : 'รายจ่าย'), amount: amt, type: currentTxType, id: Date.now() });
+            document.getElementById('tx-amount').value = '';
+            document.getElementById('tx-note').value = '';
+            localStorage.setItem('my_money_txs', JSON.stringify(transactions));
+            updateUI();
+        }
+
+        function exportToCSV() {
+            const banks = {}; for(let i=1; i<=6; i++) banks[`bank-${i}`] = document.getElementById(`name-bank-${i}`).value;
+            let csv = "\uFEFFDate,Account,Note,Type,Amount\n";
+            transactions.forEach(t => { csv += `${t.date},"${banks[t.bank]}","${t.note}",${t.type},${t.amount}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.setAttribute("download", `report_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+        function deleteTx(id) { transactions = transactions.filter(t => t.id !== id); localStorage.setItem('my_money_txs', JSON.stringify(transactions)); updateUI(); }
+        
+        function setTxType(t) { 
+            currentTxType = t;
+            const btnInc = document.getElementById('type-inc');
+            const btnExp = document.getElementById('type-exp');
+            if(t === 'income') {
+                btnInc.className = "flex-1 py-1 text-[9px] rounded-md bg-white text-green-600 font-bold border-2 border-green-500";
+                btnExp.className = "flex-1 py-1 text-[9px] rounded-md bg-red-500 text-white font-bold border-2 border-red-500 opacity-50";
+            } else {
+                btnInc.className = "flex-1 py-1 text-[9px] rounded-md bg-green-500 text-white font-bold border-2 border-green-500 opacity-50";
+                btnExp.className = "flex-1 py-1 text-[9px] rounded-md bg-white text-red-600 font-bold border-2 border-red-500";
+            }
+        }
+        
+        function clearData() { if(confirm("ล้างข้อมูลทั้งหมด?")) { localStorage.clear(); location.reload(); } }
+
+        function renderHistory() {
+            const hist = document.getElementById('tx-history');
+            const banks = {}; for(let i=1; i<=6; i++) banks[`bank-${i}`] = document.getElementById(`name-bank-${i}`).value;
+            hist.innerHTML = transactions.map(t => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-1">${t.date.split('-').reverse().slice(0,2).join('/')}</td>
+                    <td class="py-1 font-bold">${banks[t.bank] || 'Unknown'}</td>
+                    <td class="py-1">${t.note}</td>
+                    <td class="py-1 text-right font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-500'}">${t.type === 'income' ? '+' : '-'}฿${t.amount.toLocaleString()}</td>
+                    <td class="py-1 text-center no-print"><button onclick="deleteTx(${t.id})" class="text-gray-300 hover:text-red-500">✕</button></td>
+                </tr>`).join('');
+        }
+
+        function renderMonthly() {
+            const grid = document.getElementById('monthly-summary-grid');
+            const data = Array(12).fill(0).map(() => ({i:0, e:0}));
+            const y = new Date().getFullYear();
+            transactions.forEach(t => {
+                const d = new Date(t.date);
+                if(d.getFullYear() === y) {
+                    const m = d.getMonth();
+                    if(t.type === 'income') data[m].i += t.amount; else data[m].e += t.amount;
+                }
+            });
+            grid.innerHTML = i18n[currentLang].months.map((m, i) => {
+                const net = data[i].i - data[i].e;
+                return `<div class="bg-white p-1 rounded border text-center"><span class="text-[7px] text-gray-400 block">${m}</span><span class="text-[8px] font-bold ${net>0?'text-green-600':(net<0?'text-red-600':'text-gray-400')}">฿${net.toLocaleString()}</span></div>`;
+            }).join('');
+        }
+
+        window.onload = () => {
+            const s = JSON.parse(localStorage.getItem('my_money_settings_v6'));
+            if(s) {
+                document.getElementById('saving-goal').value = s.saving || 0;
+                if(s.bankNames) s.bankNames.forEach((n, i) => document.getElementById(`name-bank-${i+1}`).value = n);
+                if(s.qtys) {
+                    document.getElementById('qty-crypto-btc').value = s.qtys.btc || 0;
+                    document.getElementById('qty-crypto-eth').value = s.qtys.eth || 0;
+                    document.getElementById('qty-crypto-cgpt').value = s.qtys.cgpt || 0;
+                }
+                if(s.cgptPrice) document.getElementById('price-manual-cgpt').value = s.cgptPrice;
+            }
+            document.getElementById('lang-select').value = currentLang;
+            document.getElementById('tx-date').valueAsDate = new Date();
+            updateCryptoPrices();
+            setInterval(updateCryptoPrices, 60000);
+            setTxType('expense');
+        };
+    </script>
+</body>
+</html>
