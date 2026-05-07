@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - วัชรพงษ์ พิมพ์แม้น</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .sidebar {
+            background-color: #2c2420; 
+            color: white;
+        }
+        .main-content {
+            background-color: #fdfaf6; 
+            color: #333;
+        }
+        .header-bg {
+            background-color: #2c2420;
+            color: white;
+        }
+        .section-title {
+            border-bottom: 2px solid #2c2420;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.2rem;
+            font-weight: 600;
+        }
+        .resume-label {
+            letter-spacing: 0.5rem;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .profile-img-container {
+            aspect-ratio: 3/4;
+            background-color: #444;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .exp-btn, .skill-btn {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .exp-btn.active, .skill-btn.active {
+            background-color: #2c2420;
+            color: white;
+            border-left: 4px solid #d4a373;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .flex-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-10">
+    <div class="max-w-4xl w-full flex flex-container shadow-2xl overflow-hidden rounded-lg">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar w-full md:w-1/3 p-8 flex flex-col">
+            <div class="mb-8 text-center">
+                <h2 class="text-xl font-bold mb-4 border-b border-gray-600 pb-2 text-[#d4a373]">คติประจำใจ</h2>
+                <p class="italic text-sm leading-relaxed">
+                    “ จงเป็นผู้ชายที่ใบหน้ามีแต่รอยยิ้ม<br>
+                    แววตามีแต่เป้าหมาย<br>
+                    หัวใจมีแต่ความเข้มแข็ง ”
+                </p>
+            </div>
+
+            <div class="profile-img-container mb-8 relative group">
+                <img src="https://scontent.fbkk13-2.fna.fbcdn.net/v/t39.30808-6/646548851_26017683381220436_9003413879728819575_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGG2s_DqHjQVdxzcpz_TbPB0rQQKpTAY9zStBAqlMBj3IoXhQpiZ2-SayGUGjdi7nq9XJPSFrq0Ct-MxzDRNrlu&_nc_ohc=q4RvFPM2CBoQ7kNvwFs31Ze&_nc_oc=Adpg-qmo0HMeXSX8oIUCDzr3hvhFyL6AEqj4XMWsno6lrhHsozM3OfAfshZ1a0_0LQI&_nc_zt=23&_nc_ht=scontent.fbkk13-2.fna&_nc_gid=IoZOm90FEfjELZ5vVjfWGA&_nc_ss=7b2a8&oh=00_Af5NGCDqQ8ouemqaoKW7WDMZBa0r7BoG6GJ3Xonc7pVz3w&oe=6A0214CD" 
+                     alt="วัชรพงษ์ พิมพ์แม้น" 
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="hidden absolute inset-0 items-center justify-center text-gray-500 text-xs p-4 text-center">
+                    
+                </div>
+            </div>
+
+            <div class="resume-label text-center mb-10 border-t border-b border-gray-600 py-2">
+                RESUME
+            </div>
+
+            <div class="mb-8">
+                <h3 class="bg-[#5d4d44] px-3 py-1 mb-4 text-sm font-semibold uppercase tracking-wider">เกี่ยวกับฉัน</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>1. ฟังเพลง</li>
+                    <li>2. ออกกำลังกาย</li>
+                    <li>3. นั่งสมาธิ</li>
+                    <li>4. ขับรถได้ดี มีใบขับขี่</li>
+                    <li>5. พักต่างจังหวัดได้</li>
+                </ul>
+            </div>
+
+            <div class="mt-auto border-t border-gray-600 pt-6">
+                <h3 class="text-sm font-semibold mb-3 uppercase">ช่องทางติดต่อ</h3>
+                <div class="space-y-2 text-xs">
+                    <p class="flex items-center gap-2">📞 <span>083-506-1902</span></p>
+                    <p class="flex items-center gap-2">📧 <span>Rokgatstar1992@Gmail.com</span></p>
+                    <p class="flex items-center gap-2 italic">📍 <span>29 / 4 ต.ชุมพลบุรี อ.สุรินทร์ 32190</span></p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content w-full md:w-2/3 flex flex-col">
+            <header class="header-bg p-8">
+                <h1 class="text-4xl font-bold mb-1">วัชรพงษ์ พิมพ์แม้น</h1>
+                <p class="text-lg opacity-90 text-[#d4a373]">Store Manager / Area Manager / Distribution Center Manager</p>
+            </header>
+
+            <div class="p-8 space-y-8">
+                <!-- Education -->
+                <section>
+                    <h2 class="section-title text-xl uppercase">ประวัติการศึกษา</h2>
+                    <div class="ml-4 space-y-1">
+                        <p class="font-semibold text-gray-800">โรงเรียน ชุมพลวิทยาสรรค์</p>
+                        <p class="font-semibold text-gray-800">มหาวิทยาลัย เฉลิมกาญจนา สาขา การจัดการ</p>
+                        <p class="text-blue-700 font-bold">GPA 3.48</p>
+                    </div>
+                </section>
+
+                <!-- Personal Info -->
+                <section>
+                    <h2 class="section-title text-xl uppercase">ประวัติส่วนตัว</h2>
+                    <div class="grid grid-cols-2 gap-y-2 ml-4 text-sm max-w-sm">
+                        <span class="font-bold">ชื่อ:</span> <span>วัชรพงษ์ พิมพ์แม้น</span>
+                        <span class="font-bold">ชื่อเล่น:</span> <span>เกมส์</span>
+                        <span class="font-bold">อายุ:</span> <span>33 ปี</span>
+                        <span class="font-bold">วันเกิด:</span> <span>04.05.1993</span>
+                        <span class="font-bold">เชื้อชาติ:</span> <span>ไทย</span>
+                        <span class="font-bold">ศาสนา:</span> <span>พุทธ</span>
+                    </div>
+                </section>
+
+                <!-- Experience Section -->
+                <section>
+                    <h2 class="section-title text-xl uppercase">ประสบการณ์การทำงาน</h2>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6 ml-4">
+                        <button onclick="showTab('job0', 'exp')" id="btn-job0" class="exp-btn active px-4 py-2 bg-gray-100 rounded text-xs font-bold shadow-sm hover:bg-gray-200">
+                            ศูนย์กระจายสินค้า
+                        </button>
+                        <button onclick="showTab('job1', 'exp')" id="btn-job1" class="exp-btn px-4 py-2 bg-gray-100 rounded text-xs font-bold shadow-sm hover:bg-gray-200">
+                            ผู้จัดเขต (สยามชัย)
+                        </button>
+                        <button onclick="showTab('job2', 'exp')" id="btn-job2" class="exp-btn px-4 py-2 bg-gray-100 rounded text-xs font-bold shadow-sm hover:bg-gray-200">
+                            ผู้จัดการร้าน (7-11)
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-inner border border-gray-100 ml-4 min-h-[220px]">
+                        <div id="job0" class="tab-content active exp-content">
+                            <h3 class="font-bold text-lg text-[#2c2420] border-b pb-2 mb-3">ผู้จัดการ ศูนย์กระจายสินค้า</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                <li>การบริหารงานขายและเครดิต (Credit & Sales)</li>
+                                <li>กลยุทธ์ตลาด B2B/B2C & Partner</li>
+                                <li>การจัดการคลังสินค้า (Warehouse)</li>
+                                <li>การบริหารทีมและพัฒนาบุคลากร</li>
+                                <li>การตลาดและการจัดกิจกรรม Event</li>
+                            </ul>
+                        </div>
+                        <div id="job1" class="tab-content exp-content">
+                            <h3 class="font-bold text-lg text-[#2c2420] border-b pb-2 mb-3">ผู้จัดเขต สยามชัย เซอร์วิส</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                <li>ดูแลรับผิดชอบทั้งหมด <span class="font-bold">11 สาขา</span></li>
+                                <li>บริหารทีมงานมากกว่า <span class="font-bold">40 คน</span></li>
+                                <li>วิเคราะห์กำไรและค่า <span class="font-bold">KPI</span> รายสาขา</li>
+                                <li>สร้างเป้าหมายและวิสัยทัศน์ร่วมกัน</li>
+                            </ul>
+                        </div>
+                        <div id="job2" class="tab-content exp-content">
+                            <h3 class="font-bold text-lg text-[#2c2420] border-b pb-2 mb-3">ผู้จัดการร้าน 7-Eleven</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                <li>บริหารทีมงานมากกว่า 15 คน</li>
+                                <li>รับผิดชอบยอดขายและสต็อกสินค้า</li>
+                                <li>แก้ปัญหาเฉพาะหน้าภายใต้ความกดดัน</li>
+                                <li>คุมมาตรฐานการบริการลูกค้า</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Special Skills Section -->
+                <section>
+                    <h2 class="section-title text-xl uppercase">ความสามารถพิเศษ</h2>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6 ml-4">
+                        <button onclick="showTab('skill-ai', 'skill')" id="btn-skill-ai" class="skill-btn active px-4 py-2 bg-gray-100 rounded text-xs font-bold shadow-sm hover:bg-gray-200">
+                            🤖 AI & Technology
+                        </button>
+                        <button onclick="showTab('skill-leader', 'skill')" id="btn-skill-leader" class="skill-btn px-4 py-2 bg-gray-100 rounded text-xs font-bold shadow-sm hover:bg-gray-200">
+                            ความเป็นผู้นำ
+                        </button>
+                        <button onclick="showTab('skill-manage', 'skill')" id="btn-skill-manage" class="skill-btn px-4 py-2 bg-gray-100 rounded text-xs font-bold shadow-sm hover:bg-gray-200">
+                            การบริหารจัดการ
+                        </button>
+                    </div>
+
+                    <div class="bg-[#f0ece9] p-6 rounded-lg shadow-inner border border-gray-200 ml-4">
+                        <!-- AI & Tech Skill Content -->
+                        <div id="skill-ai" class="tab-content active skill-content">
+                            <h3 class="font-bold text-md text-[#2c2420] mb-3 uppercase tracking-tighter">AI Literacy for Management</h3>
+                            <div class="space-y-4 text-sm text-gray-700">
+                                <p class="italic text-xs text-gray-500 mb-2">ประยุกต์ใช้ AI เพื่อเพิ่มประสิทธิภาพการทำงานระดับผู้บริหาร</p>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li><span class="font-bold text-[#2c2420]">AI-Driven Analytics:</span> ใช้ AI ช่วยวิเคราะห์ข้อมูลยอดขายและ KPI เพื่อการตัดสินใจที่แม่นยำ</li>
+                                    <li><span class="font-bold text-[#2c2420]">Smart Planning:</span> ใช้ AI ช่วยวางแผนงานกิจกรรม (Event) และกลยุทธ์การตลาด</li>
+                                    <li><span class="font-bold text-[#2c2420]">Workflow Automation:</span> พัฒนาขั้นตอนการทำงานให้รวดเร็วขึ้นด้วยเครื่องมือดิจิทัล</li>
+                                    <li><span class="font-bold text-[#2c2420]">Prompt Engineering:</span> ทักษะการสั่งการ AI เพื่อสรุปรายงานและจัดทำข้อมูลนำเสนอ</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="skill-leader" class="tab-content skill-content">
+                            <h3 class="font-bold text-md text-[#2c2420] mb-3 uppercase tracking-tighter">Leadership & Team Building</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span>การสร้างแรงจูงใจทีมงาน</span><span>95%</span></div>
+                                    <div class="w-full bg-gray-300 h-1.5 rounded-full"><div class="bg-[#2c2420] h-1.5 rounded-full" style="width: 95%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span>การตัดสินใจในสภาวะวิกฤต</span><span>90%</span></div>
+                                    <div class="w-full bg-gray-300 h-1.5 rounded-full"><div class="bg-[#2c2420] h-1.5 rounded-full" style="width: 90%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="skill-manage" class="tab-content skill-content">
+                            <h3 class="font-bold text-md text-[#2c2420] mb-3 uppercase tracking-tighter">Strategic Management</h3>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-700">
+                                <li class="flex items-center gap-2"><span class="text-[#d4a373]">✔</span> วิเคราะห์ KPI & ยอดขาย</li>
+                                <li class="flex items-center gap-2"><span class="text-[#d4a373]">✔</span> วางแผนกลยุทธ์ B2B / B2C</li>
+                                <li class="flex items-center gap-2"><span class="text-[#d4a373]">✔</span> บริหารจัดการคลังสินค้า</li>
+                                <li class="flex items-center gap-2"><span class="text-[#d4a373]">✔</span> การควบคุมต้นทุน (Cost Control)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showTab(tabId, group) {
+            // ซ่อนเนื้อหาในกลุ่มที่เลือก
+            const contents = document.querySelectorAll('.' + group + '-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // ลบสถานะ Active จากปุ่มในกลุ่มที่เลือก
+            const buttons = document.querySelectorAll('.' + group + '-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // แสดงเนื้อหาและปุ่มที่เลือก
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
