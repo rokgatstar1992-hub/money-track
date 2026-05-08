@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - วัชรพงษ์ พิมพ์แมน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c2420;
+            --accent: #d4a373;
+            --bg-light: #fdfaf6;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            overflow-x: hidden;
+            overscroll-behavior: none;
+        }
+
+        .section-title {
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .profile-img-container {
+            width: 170px;
+            height: 225px;
+            background-color: #444;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 1rem;
+        }
+
+        .exp-btn, .skill-btn {
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .exp-btn.active, .skill-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        /* กลไกการล็อกหน้ากระดาษขั้นสูงสุด */
+        .tab-container-fixed {
+            position: relative;
+            /* กำหนดความสูงที่ครอบคลุมเนื้อหาที่ยาวที่สุด เพื่อไม่ให้ขยับ */
+            height: 250px; 
+            overflow: hidden;
+            display: block;
+        }
+
+        /* สำหรับส่วนทักษะที่เนื้อหาอาจจะยาวกว่า */
+        .skill-container-fixed {
+            height: 320px;
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeInOnly 0.3s ease-in-out;
+        }
+
+        @keyframes fadeInOnly {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .skill-bar-bg {
+            height: 10px;
+            background-color: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 999px;
+            width: 0;
+            transition: width 1s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .tab-container-fixed {
+                height: 420px; /* ปรับความสูงสำหรับหน้าจอขนาดเล็ก */
+            }
+            .skill-container-fixed {
+                height: 550px;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-start justify-center min-h-screen p-2 md:p-6">
+    <div class="max-w-5xl w-full shadow-2xl overflow-hidden rounded-3xl bg-white flex flex-col my-4">
+        
+        <!-- Header Section -->
+        <header class="bg-[#2c2420] text-white p-6 md:p-10">
+            <div class="flex flex-col md:flex-row gap-6 items-center profile-header">
+                <div class="profile-img-container shrink-0">
+                    <img src="https://scontent.fbkk13-2.fna.fbcdn.net/v/t39.30808-6/646548851_26017683381220436_9003413879728819575_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGG2s_DqHjQVdxzcpz_TbPB0rQQKpTAY9zStBAqlMBj3IoXhQpiZ2-SayGUGjdi7nq9XJPSFrq0Ct-MxzDRNrlu&_nc_ohc=q4RvFPM2CBoQ7kNvwFs31Ze&_nc_oc=Adpg-qmo0HMeXSX8oIUCDzr3hvhFyL6AEqj4XMWsno6lrhHsozM3OfAfshZ1a0_0LQI&_nc_zt=23&_nc_ht=scontent.fbkk13-2.fna&_nc_gid=IoZOm90FEfjELZ5vVjfWGA&_nc_ss=7b2a8&oh=00_Af5NGCDqQ8ouemqaoKW7WDMZBa0r7BoG6GJ3Xonc7pVz3w&oe=6A0214CD" 
+                         alt="วัชรพงษ์ พิมพ์แมน" 
+                         class="w-full h-full object-cover"
+                         onerror="this.src='https://placehold.co/400x533/2c2420/d4a373?text=Profile';">
+                </div>
+                <div class="flex-1">
+                    <div class="mb-4">
+                        <span class="text-[#d4a373] tracking-[0.3em] text-sm font-bold uppercase block mb-1">RESUME</span>
+                        <h1 class="text-4xl md:text-5xl font-bold mb-1">วัชรพงษ์ พิมพ์แมน</h1>
+                        <p class="text-lg md:text-xl text-[#d4a373] font-medium tracking-wide">Store Manager / Area Manager / Distribution Center Manager</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-base opacity-95 border-t border-white/10 pt-4">
+                        <p class="flex items-center gap-2"><span>📞</span> 083-506-1902</p>
+                        <p class="flex items-center gap-2"><span>📧</span> Rokgatstar1992@Gmail.com</p>
+                        <p class="flex items-start gap-2 md:col-span-2"><span>📍</span> <span>29 / 4 ต.ชุมพลบุรี อ.สุรินทร์ 32190</span></p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="bg-[#fdfaf6] p-6 md:p-10 space-y-10">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Education -->
+                <section>
+                    <h2 class="section-title text-xl">ประวัติการศึกษา</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                            <span class="text-2xl">🏫</span>
+                            <div>
+                                <p class="font-bold text-gray-800 text-base">โรงเรียน ชุมพลวิทยาสรรค์</p>
+                                <p class="text-sm text-gray-500">มัธยมศึกษา</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                            <span class="text-2xl">🎓</span>
+                            <div>
+                                <p class="font-bold text-gray-800 text-base">มหาวิทยาลัย เฉลิมกาญจนา สาขา การจัดการ</p>
+                                <p class="text-blue-700 font-bold text-lg mt-0.5">GPA 3.48</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Motto & About Me -->
+                <section>
+                    <h2 class="section-title text-xl">คติประจำใจ & เกี่ยวกับฉัน</h2>
+                    <div class="bg-[#2c2420] text-white p-5 rounded-2xl shadow-lg mb-4">
+                        <p class="italic text-center text-base leading-relaxed font-light">
+                            “ จงเป็นผู้ชายที่ใบหน้ามีแต่รอยยิ้ม แววตามีแต่เป้าหมาย หัวใจมีแต่ความเข้มแข็ง ”
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm">1. ฟังเพลง</div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm">2. ออกกำลังกาย</div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm">3. นั่งสมาธิ</div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm">4. ขับรถได้ดี มีใบขับขี่</div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm col-span-2">5. พักต่างจังหวัดได้</div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Personal Info -->
+            <section>
+                <h2 class="section-title text-xl">ประวัติส่วนตัว</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-base bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex flex-col"><span class="font-bold text-gray-400 text-xs uppercase mb-0.5">ชื่อ</span> <span class="font-semibold text-sm">วัชรพงษ์ พิมพ์แมน</span></div>
+                    <div class="flex flex-col"><span class="font-bold text-gray-400 text-xs uppercase mb-0.5">ชื่อเล่น</span> <span class="font-semibold text-sm text-[#d4a373]">เกมส์</span></div>
+                    <div class="flex flex-col"><span class="font-bold text-gray-400 text-xs uppercase mb-0.5">อายุ</span> <span class="font-semibold text-sm">33 ปี</span></div>
+                    <div class="flex flex-col"><span class="font-bold text-gray-400 text-xs uppercase mb-0.5">วันเกิด</span> <span class="font-semibold text-sm">04.05.1993</span></div>
+                    <div class="flex flex-col"><span class="font-bold text-gray-400 text-xs uppercase mb-0.5">เชื้อชาติ</span> <span class="font-semibold text-sm">ไทย</span></div>
+                    <div class="flex flex-col"><span class="font-bold text-gray-400 text-xs uppercase mb-0.5">ศาสนา</span> <span class="font-semibold text-sm">พุทธ</span></div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section>
+                <h2 class="section-title text-xl">ประสบการณ์การทำงาน</h2>
+                <div class="flex flex-wrap gap-2 mb-5">
+                    <button onclick="showTab('job0', 'exp')" id="btn-job0" class="exp-btn active px-5 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold shadow-sm">
+                        ศูนย์กระจายสินค้า
+                    </button>
+                    <button onclick="showTab('job1', 'exp')" id="btn-job1" class="exp-btn px-5 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold shadow-sm">
+                        ผู้จัดเขต (สยามชัย)
+                    </button>
+                    <button onclick="showTab('job2', 'exp')" id="btn-job2" class="exp-btn px-5 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold shadow-sm">
+                        ผู้จัดการร้าน (7-11)
+                    </button>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 tab-container-fixed">
+                    <div id="job0" class="tab-content active exp-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-2xl text-[#2c2420]">ผู้จัดการ ศูนย์กระจายสินค้า</h3>
+                            <span class="text-xs bg-[#f3f4f6] text-gray-500 px-3 py-1 rounded-full font-bold">2569 - ปัจจุบัน</span>
+                        </div>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                            <li class="flex items-center gap-2">✦ การบริหารงานขายและเครดิต</li>
+                            <li class="flex items-center gap-2">✦ กลยุทธ์ตลาด B2B/B2C & Partner</li>
+                            <li class="flex items-center gap-2">✦ การจัดการคลังสินค้า (Warehouse)</li>
+                            <li class="flex items-center gap-2">✦ การบริหารทีมและพัฒนาบุคลากร</li>
+                            <li class="flex items-center gap-2">✦ การตลาดและการจัดกิจกรรม Event</li>
+                        </ul>
+                    </div>
+                    <div id="job1" class="tab-content exp-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-2xl text-[#2c2420]">ผู้จัดเขต สยามชัย เซอร์วิส</h3>
+                            <span class="text-xs bg-[#f3f4f6] text-gray-500 px-3 py-1 rounded-full font-bold">2568 - 2569</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                            <p class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg text-base">🏢 ดูแลรับผิดชอบ <span class="font-bold text-black">11 สาขา</span></p>
+                            <p class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg text-base">👥 บริหารทีมงาน <span class="font-bold text-black">40+ คน</span></p>
+                            <p class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg text-base">📊 วิเคราะห์ <span class="font-bold text-black">KPI</span> รายสาขา</p>
+                            <p class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg text-base">🎯 สร้างวิสัยทัศน์ร่วมกัน</p>
+                        </div>
+                    </div>
+                    <div id="job2" class="tab-content exp-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-2xl text-[#2c2420]">ผู้จัดการร้าน 7-Eleven</h3>
+                            <span class="text-xs bg-[#f3f4f6] text-gray-500 px-3 py-1 rounded-full font-bold">2560 - 2568</span>
+                        </div>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#d4a373]"></span> บริหารทีมงานมากกว่า 15 คน</li>
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#d4a373]"></span> รับผิดชอบยอดขายและสต็อก</li>
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#d4a373]"></span> แก้ปัญหาภายใต้ความกดดัน</li>
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#d4a373]"></span> คุมมาตรฐานการบริการ</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Special Skills Section -->
+            <section>
+                <h2 class="section-title text-xl">ความสามารถพิเศษ</h2>
+                
+                <div class="flex flex-wrap gap-2 mb-5">
+                    <button onclick="showTab('skill-ai', 'skill')" id="btn-skill-ai" class="skill-btn active px-5 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold shadow-sm">
+                        🤖 AI & Technology
+                    </button>
+                    <button onclick="showTab('skill-leader', 'skill')" id="btn-skill-leader" class="skill-btn px-5 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold shadow-sm">
+                        ความเป็นผู้นำ
+                    </button>
+                    <button onclick="showTab('skill-manage', 'skill')" id="btn-skill-manage" class="skill-btn px-5 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold shadow-sm">
+                        การบริหารจัดการ
+                    </button>
+                </div>
+
+                <div class="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-gray-100 w-full tab-container-fixed skill-container-fixed">
+                    <div id="skill-ai" class="tab-content active skill-content">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-3">
+                            <h3 class="font-bold text-2xl text-[#2c2420] uppercase tracking-tight">AI Literacy for Management</h3>
+                            <span class="bg-[#fdfaf6] text-gray-500 text-xs px-4 py-1.5 rounded-full border border-gray-100 italic">เพิ่มประสิทธิภาพการทำงานด้วย AI</span>
+                        </div>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm text-gray-700">
+                            <li class="bg-gray-50 p-4 rounded-xl border-l-4 border-[#2c2420]">
+                                <span class="font-bold text-[#2c2420] text-base block mb-1">• AI-Driven Analytics</span> 
+                                วิเคราะห์ยอดขายและ KPI เพื่อการตัดสินใจ
+                            </li>
+                            <li class="bg-gray-50 p-4 rounded-xl border-l-4 border-[#2c2420]">
+                                <span class="font-bold text-[#2c2420] text-base block mb-1">• Smart Planning</span> 
+                                วางแผนงานกิจกรรมและกลยุทธ์การตลาด
+                            </li>
+                            <li class="bg-gray-50 p-4 rounded-xl border-l-4 border-[#2c2420]">
+                                <span class="font-bold text-[#2c2420] text-base block mb-1">• Workflow Automation</span> 
+                                พัฒนาขั้นตอนการทำงานให้รวดเร็วขึ้น
+                            </li>
+                            <li class="bg-gray-50 p-4 rounded-xl border-l-4 border-[#2c2420]">
+                                <span class="font-bold text-[#2c2420] text-base block mb-1">• Prompt Engineering</span> 
+                                สั่งการ AI สรุปรายงานและข้อมูลนำเสนอ
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="skill-leader" class="tab-content skill-content">
+                        <h3 class="font-bold text-2xl text-[#2c2420] mb-8 uppercase tracking-tight">Leadership & Team Building</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div>
+                                <div class="flex justify-between text-xs font-bold mb-3 uppercase tracking-widest text-gray-400"><span>การสร้างแรงจูงใจทีมงาน</span><span>95%</span></div>
+                                <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 95%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-bold mb-3 uppercase tracking-widest text-gray-400"><span>การตัดสินใจในสภาวะวิกฤต</span><span>90%</span></div>
+                                <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="skill-manage" class="tab-content skill-content">
+                        <h3 class="font-bold text-2xl text-[#2c2420] mb-6 uppercase tracking-tight">Strategic Management</h3>
+                        <ul class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-700">
+                            <li class="flex flex-col gap-2 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                                <span class="text-3xl">📊</span>
+                                <span class="font-bold text-base">วิเคราะห์ KPI</span>
+                            </li>
+                            <li class="flex flex-col gap-2 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                                <span class="text-3xl">🎯</span>
+                                <span class="font-bold text-base">กลยุทธ์ B2B/B2C</span>
+                            </li>
+                            <li class="flex flex-col gap-2 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                                <span class="text-3xl">📦</span>
+                                <span class="font-bold text-base">คลังสินค้า</span>
+                            </li>
+                            <li class="flex flex-col gap-2 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                                <span class="text-3xl">💰</span>
+                                <span class="font-bold text-base">คุมต้นทุน</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="bg-gray-100 p-5 text-center text-xs text-gray-400 uppercase tracking-[0.2em]">
+            © 2024 Watcharaphong Phimmaen • Professional Portfolio
+        </footer>
+    </div>
+
+    <script>
+        function showTab(tabId, group) {
+            const contents = document.querySelectorAll('.' + group + '-content');
+            contents.forEach(content => content.style.display = 'none');
+
+            const buttons = document.querySelectorAll('.' + group + '-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            const targetContent = document.getElementById(tabId);
+            const targetButton = document.getElementById('btn-' + tabId);
+            
+            if (targetContent) {
+                targetContent.style.display = 'block';
+                // บังคับให้เบราว์เซอร์รับรู้การแสดงผลก่อนเริ่มแอนิเมชัน
+                void targetContent.offsetWidth; 
+                targetContent.classList.add('active');
+            }
+            if (targetButton) targetButton.classList.add('active');
+        }
+    </script>
+</body>
+</html>
