@@ -1,0 +1,425 @@
+import { useState, useEffect } from "react";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, RadialBarChart, RadialBar } from "recharts";
+
+const palette = {
+  bg: "#060d18",
+  card: "rgba(255,255,255,0.04)",
+  border: "rgba(255,255,255,0.08)",
+  teal: "#00e5b0",
+  blue: "#1a8cff",
+  orange: "#ff7a2f",
+  red: "#ff4466",
+  yellow: "#ffd426",
+  text: "#e8f0ff",
+  muted: "rgba(232,240,255,0.45)",
+};
+
+// --- Simulated live data ---
+const throughputData = [
+  { time: "00:00", inbound: 42, outbound: 18 },
+  { time: "02:00", inbound: 28, outbound: 12 },
+  { time: "04:00", inbound: 15, outbound: 55 },
+  { time: "06:00", inbound: 60, outbound: 88 },
+  { time: "08:00", inbound: 110, outbound: 134 },
+  { time: "10:00", inbound: 145, outbound: 160 },
+  { time: "12:00", inbound: 98, outbound: 122 },
+  { time: "14:00", inbound: 130, outbound: 148 },
+  { time: "16:00", inbound: 88, outbound: 105 },
+  { time: "18:00", inbound: 72, outbound: 90 },
+  { time: "20:00", inbound: 55, outbound: 68 },
+  { time: "22:00", inbound: 38, outbound: 44 },
+];
+
+const abcData = [
+  { name: "A – Top Rank", value: 65, color: palette.teal },
+  { name: "B – Mid Rank", value: 22, color: palette.blue },
+  { name: "C – Low Rank", value: 13, color: palette.muted },
+];
+
+const zoneData = [
+  { zone: "Zone A", util: 78, cap: 100 },
+  { zone: "Zone B", util: 85, cap: 100 },
+  { zone: "Zone C", util: 62, cap: 100 },
+  { zone: "Zone D", util: 91, cap: 100 },
+  { zone: "Zone E", util: 55, cap: 100 },
+];
+
+const fifoData = [
+  { shift: "เช้า", accuracy: 97.2 },
+  { shift: "บ่าย", accuracy: 94.8 },
+  { shift: "ดึก", accuracy: 98.5 },
+];
+
+const kpiCards = [
+  { label: "Warehouse Utilization", value: 78, unit: "%", target: 85, icon: "🏭", color: palette.teal, good: true },
+  { label: "FIFO Accuracy", value: 96.8, unit: "%", target: 95, icon: "📦", color: palette.blue, good: true },
+  { label: "Throughput วันนี้", value: 1284, unit: " พาเลท", target: 1200, icon: "🔄", color: palette.yellow, good: true },
+  { label: "Zone D Overload", value: 91, unit: "%", target: 85, icon: "⚠️", color: palette.red, good: false },
+];
+
+const topSKU = [
+  { sku: "น้ำดื่ม 600ml", sales: 420, stock: 1200, days: 2.9 },
+  { sku: "น้ำอัดลม 1L", sales: 380, stock: 980, days: 2.6 },
+  { sku: "นมกล่อง UHT", sales: 310, stock: 740, days: 2.4 },
+  { sku: "สบู่เหลว 500ml", sales: 260, stock: 620, days: 2.4 },
+  { sku: "แชมพู 400ml", sales: 195, stock: 510, days: 2.6 },
+];
+
+function KPICard({ card, delay }) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    const t = setTimeout(() => setVal(card.value), delay);
+    return () => clearTimeout(t);
+  }, []);
+
+  const pct = Math.min((val / card.target) * 100, 150);
+  const over = val > card.target && !card.good;
+
+  return (
+    <div style={{
+      background: card.good ? palette.card : "rgba(255,68,102,0.07)",
+      border: `1px solid ${over ? palette.red + "60" : palette.border}`,
+      borderRadius: 16, padding: "20px 22px",
+      position: "relative", overflow: "hidden",
+      animation: `fadeUp 0.5s ease ${delay}ms both`,
+    }}>
+      {over && (
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 3,
+          background: `linear-gradient(90deg, ${palette.red}, transparent)`,
+          animation: "pulse 1.5s infinite",
+        }} />
+      )}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+        <span style={{ fontSize: 22 }}>{card.icon}</span>
+        <span style={{
+          fontSize: 10, padding: "3px 8px", borderRadius: 20,
+          background: over ? "rgba(255,68,102,0.15)" : "rgba(255,255,255,0.06)",
+          color: over ? palette.red : palette.muted,
+          border: `1px solid ${over ? palette.red + "40" : "transparent"}`,
+        }}>
+          {over ? "⚠ เกิน Target" : `Target ${card.target}${card.unit}`}
+        </span>
+      </div>
+      <div style={{ fontSize: 28, fontWeight: 800, color: over ? palette.red : card.color, fontFamily: "'DM Mono', monospace", lineHeight: 1 }}>
+        {typeof val === "number" && val % 1 !== 0 ? val.toFixed(1) : Math.round(val)}{card.unit}
+      </div>
+      <div style={{ color: palette.muted, fontSize: 12, marginTop: 6 }}>{card.label}</div>
+      <div style={{ marginTop: 14, height: 4, borderRadius: 4, background: "rgba(255,255,255,0.08)" }}>
+        <div style={{
+          height: "100%", borderRadius: 4,
+          width: `${Math.min(pct, 100)}%`,
+          background: over
+            ? `linear-gradient(90deg, ${palette.red}, #ff8866)`
+            : `linear-gradient(90deg, ${card.color}88, ${card.color})`,
+          transition: "width 1s ease",
+          boxShadow: `0 0 8px ${card.color}60`,
+        }} />
+      </div>
+    </div>
+  );
+}
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div style={{
+      background: "#0d1b2e", border: `1px solid ${palette.border}`,
+      borderRadius: 10, padding: "10px 14px", fontSize: 12, color: palette.text,
+    }}>
+      <div style={{ marginBottom: 6, color: palette.muted }}>{label}</div>
+      {payload.map((p, i) => (
+        <div key={i} style={{ color: p.color, marginBottom: 2 }}>
+          {p.name}: <strong>{p.value}</strong>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default function DCDashboard() {
+  const [now, setNow] = useState(new Date());
+  const [activeTab, setActiveTab] = useState("overview");
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const timeStr = now.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const dateStr = now.toLocaleDateString("th-TH", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  return (
+    <div style={{
+      minHeight: "100vh", background: palette.bg,
+      fontFamily: "'Sarabun', 'Noto Sans Thai', sans-serif",
+      color: palette.text, overflowX: "hidden",
+    }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .tab-btn:hover { background: rgba(255,255,255,0.08) !important; }
+        .row-hover:hover { background: rgba(255,255,255,0.04) !important; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{
+        padding: "0 28px", height: 64,
+        borderBottom: `1px solid ${palette.border}`,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        background: "rgba(255,255,255,0.02)", backdropFilter: "blur(20px)",
+        position: "sticky", top: 0, zIndex: 100,
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: 10,
+            background: `linear-gradient(135deg, ${palette.teal}, ${palette.blue})`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 20, boxShadow: `0 0 18px ${palette.teal}40`,
+          }}>🏭</div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: 0.5 }}>DC Blueprint Dashboard</div>
+            <div style={{ fontSize: 11, color: palette.muted }}>World-class Distribution Center</div>
+          </div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 20, fontWeight: 500, color: palette.teal, letterSpacing: 2 }}>
+            {timeStr}
+          </div>
+          <div style={{ fontSize: 11, color: palette.muted }}>{dateStr}</div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ padding: "16px 28px 0", display: "flex", gap: 6 }}>
+        {[["overview", "📊 ภาพรวม"], ["zones", "🗺️ โซนสินค้า"], ["sku", "📦 Top SKU"]].map(([id, label]) => (
+          <button key={id} className="tab-btn" onClick={() => setActiveTab(id)} style={{
+            padding: "8px 18px", borderRadius: 10, border: "none", cursor: "pointer",
+            background: activeTab === id ? `linear-gradient(135deg, ${palette.teal}22, ${palette.blue}22)` : "transparent",
+            color: activeTab === id ? palette.teal : palette.muted,
+            fontSize: 13, fontFamily: "inherit", fontWeight: activeTab === id ? 600 : 400,
+            borderBottom: activeTab === id ? `2px solid ${palette.teal}` : "2px solid transparent",
+            transition: "all 0.2s",
+          }}>{label}</button>
+        ))}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: palette.teal, animation: "pulse 2s infinite" }} />
+          <span style={{ fontSize: 12, color: palette.muted }}>Live Data</span>
+        </div>
+      </div>
+
+      <div style={{ padding: "20px 28px 32px" }}>
+
+        {activeTab === "overview" && (
+          <>
+            {/* KPI Cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 24 }}>
+              {kpiCards.map((c, i) => <KPICard key={i} card={c} delay={i * 100} />)}
+            </div>
+
+            {/* Charts row */}
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16, marginBottom: 16 }}>
+              {/* Throughput chart */}
+              <div style={{ background: palette.card, border: `1px solid ${palette.border}`, borderRadius: 16, padding: "20px 20px 12px", animation: "fadeUp 0.5s ease 400ms both" }}>
+                <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>Throughput รายชั่วโมง</div>
+                    <div style={{ color: palette.muted, fontSize: 11 }}>พาเลท Inbound vs Outbound</div>
+                  </div>
+                  <div style={{ display: "flex", gap: 14, fontSize: 11 }}>
+                    <span style={{ color: palette.teal }}>● Inbound</span>
+                    <span style={{ color: palette.blue }}>● Outbound</span>
+                  </div>
+                </div>
+                <ResponsiveContainer width="100%" height={200}>
+                  <LineChart data={throughputData} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+                    <XAxis dataKey="time" tick={{ fill: palette.muted, fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: palette.muted, fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Line type="monotone" dataKey="inbound" stroke={palette.teal} strokeWidth={2} dot={false} name="Inbound" />
+                    <Line type="monotone" dataKey="outbound" stroke={palette.blue} strokeWidth={2} dot={false} name="Outbound" strokeDasharray="4 2" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* ABC Pie */}
+              <div style={{ background: palette.card, border: `1px solid ${palette.border}`, borderRadius: 16, padding: "20px", animation: "fadeUp 0.5s ease 500ms both" }}>
+                <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>ABC Analysis</div>
+                <div style={{ color: palette.muted, fontSize: 11, marginBottom: 16 }}>สัดส่วนกลุ่มสินค้า</div>
+                <ResponsiveContainer width="100%" height={160}>
+                  <PieChart>
+                    <Pie data={abcData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value" paddingAngle={3}>
+                      {abcData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                    </Pie>
+                    <Tooltip formatter={(v) => `${v}%`} contentStyle={{ background: "#0d1b2e", border: `1px solid ${palette.border}`, borderRadius: 8, fontSize: 12 }} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {abcData.map((d, i) => (
+                    <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{ width: 8, height: 8, borderRadius: 2, background: d.color }} />
+                        <span style={{ color: palette.muted }}>{d.name}</span>
+                      </div>
+                      <span style={{ color: d.color, fontFamily: "'DM Mono', monospace", fontWeight: 500 }}>{d.value}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* FIFO accuracy per shift */}
+            <div style={{ background: palette.card, border: `1px solid ${palette.border}`, borderRadius: 16, padding: "20px", animation: "fadeUp 0.5s ease 600ms both" }}>
+              <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>FIFO Accuracy แยกตามกะ</div>
+              <div style={{ color: palette.muted, fontSize: 11, marginBottom: 16 }}>เป้าหมาย ≥ 95%</div>
+              <div style={{ display: "flex", gap: 20 }}>
+                {fifoData.map((d, i) => {
+                  const ok = d.accuracy >= 95;
+                  return (
+                    <div key={i} style={{ flex: 1, background: "rgba(255,255,255,0.03)", borderRadius: 12, padding: "16px", border: `1px solid ${ok ? palette.border : palette.red + "40"}` }}>
+                      <div style={{ color: palette.muted, fontSize: 12, marginBottom: 10 }}>กะ{d.shift}</div>
+                      <div style={{ fontSize: 28, fontWeight: 800, fontFamily: "'DM Mono', monospace", color: ok ? palette.teal : palette.red }}>{d.accuracy}%</div>
+                      <div style={{ marginTop: 10, height: 4, borderRadius: 4, background: "rgba(255,255,255,0.07)" }}>
+                        <div style={{ height: "100%", borderRadius: 4, width: `${d.accuracy}%`, background: ok ? palette.teal : palette.red, boxShadow: `0 0 6px ${ok ? palette.teal : palette.red}60`, transition: "width 1s ease" }} />
+                      </div>
+                      <div style={{ fontSize: 11, marginTop: 8, color: ok ? palette.teal : palette.red }}>{ok ? "✓ ผ่านเกณฑ์" : "✗ ต่ำกว่าเป้า"}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === "zones" && (
+          <div style={{ animation: "fadeUp 0.4s ease both" }}>
+            <div style={{ background: palette.card, border: `1px solid ${palette.border}`, borderRadius: 16, padding: "24px", marginBottom: 16 }}>
+              <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>Zone Utilization</div>
+              <div style={{ color: palette.muted, fontSize: 11, marginBottom: 20 }}>ความจุแต่ละโซน (เป้าหมายไม่เกิน 85%)</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                {zoneData.map((z, i) => {
+                  const over = z.util > 85;
+                  return (
+                    <div key={i}>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                        <span style={{ fontSize: 13, fontWeight: 500 }}>{z.zone}</span>
+                        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                          {over && <span style={{ fontSize: 11, color: palette.red, background: "rgba(255,68,102,0.1)", padding: "2px 8px", borderRadius: 10, border: `1px solid ${palette.red}30` }}>⚠ เกิน 85%</span>}
+                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, color: over ? palette.red : palette.teal }}>{z.util}%</span>
+                        </div>
+                      </div>
+                      <div style={{ height: 10, borderRadius: 6, background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
+                        <div style={{
+                          height: "100%", width: `${z.util}%`, borderRadius: 6,
+                          background: over
+                            ? `linear-gradient(90deg, ${palette.orange}, ${palette.red})`
+                            : `linear-gradient(90deg, ${palette.blue}, ${palette.teal})`,
+                          boxShadow: `0 0 8px ${over ? palette.red : palette.teal}50`,
+                          transition: "width 1s ease",
+                        }} />
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontSize: 10, color: palette.muted }}>
+                        <span>0%</span>
+                        <span style={{ color: over ? palette.red + "80" : palette.muted }}>85% limit</span>
+                        <span>100%</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ background: palette.card, border: `1px solid ${palette.border}`, borderRadius: 16, padding: "24px" }}>
+              <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 16 }}>แผนผัง Multi-U Shape (แผนผังแบบง่าย)</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, fontSize: 12 }}>
+                {[
+                  { label: "🚪 Inbound Dock", color: palette.blue + "30", border: palette.blue },
+                  { label: "📦 Zone A (Top Rank)", color: palette.teal + "20", border: palette.teal },
+                  { label: "🚪 Outbound Dock", color: palette.orange + "20", border: palette.orange },
+                  { label: "🔄 Staging Area", color: palette.yellow + "15", border: palette.yellow },
+                  { label: "📦 Zone B (Mid)", color: palette.blue + "15", border: palette.blue },
+                  { label: "🔄 Staging Area", color: palette.yellow + "15", border: palette.yellow },
+                  { label: "🏢 Office/IC", color: "rgba(255,255,255,0.05)", border: palette.muted },
+                  { label: "📦 Zone C-E (Low)", color: "rgba(255,255,255,0.04)", border: palette.muted },
+                  { label: "🔋 Charging Bay", color: "rgba(255,255,255,0.03)", border: palette.muted },
+                ].map((b, i) => (
+                  <div key={i} style={{
+                    background: b.color, border: `1px solid ${b.border}`,
+                    borderRadius: 10, padding: "14px 10px", textAlign: "center",
+                    color: palette.text, fontSize: 11, lineHeight: 1.5,
+                  }}>{b.label}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "sku" && (
+          <div style={{ animation: "fadeUp 0.4s ease both" }}>
+            <div style={{ background: palette.card, border: `1px solid ${palette.border}`, borderRadius: 16, padding: "24px", marginBottom: 16 }}>
+              <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>Top 5 SKU – ยอดขายสูงสุด</div>
+              <div style={{ color: palette.muted, fontSize: 11, marginBottom: 20 }}>หน่วย: กล่อง/วัน | Days of Supply = Stock ÷ Sales</div>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${palette.border}` }}>
+                      {["#", "สินค้า", "ยอดขาย/วัน", "Stock คงเหลือ", "Days of Supply", "สถานะ"].map((h, i) => (
+                        <th key={i} style={{ textAlign: i > 1 ? "right" : "left", padding: "8px 12px", color: palette.muted, fontWeight: 500, fontSize: 11 }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {topSKU.map((s, i) => {
+                      const warn = s.days < 2.5;
+                      return (
+                        <tr key={i} className="row-hover" style={{ borderBottom: `1px solid ${palette.border}`, transition: "background 0.15s" }}>
+                          <td style={{ padding: "13px 12px", color: palette.muted, fontFamily: "'DM Mono', monospace" }}>{i + 1}</td>
+                          <td style={{ padding: "13px 12px", fontWeight: 500 }}>{s.sku}</td>
+                          <td style={{ padding: "13px 12px", textAlign: "right", fontFamily: "'DM Mono', monospace", color: palette.teal }}>{s.sales.toLocaleString()}</td>
+                          <td style={{ padding: "13px 12px", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>{s.stock.toLocaleString()}</td>
+                          <td style={{ padding: "13px 12px", textAlign: "right", fontFamily: "'DM Mono', monospace", color: warn ? palette.red : palette.yellow }}>{s.days} วัน</td>
+                          <td style={{ padding: "13px 12px", textAlign: "right" }}>
+                            <span style={{
+                              fontSize: 11, padding: "3px 10px", borderRadius: 10,
+                              background: warn ? "rgba(255,68,102,0.12)" : "rgba(0,229,176,0.1)",
+                              color: warn ? palette.red : palette.teal,
+                              border: `1px solid ${warn ? palette.red + "30" : palette.teal + "30"}`,
+                            }}>
+                              {warn ? "⚠ เติมด่วน" : "✓ ปกติ"}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style={{ background: palette.card, border: `1px solid ${palette.border}`, borderRadius: 16, padding: "24px" }}>
+              <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>ยอดขาย Top 5 SKU เปรียบเทียบ</div>
+              <div style={{ color: palette.muted, fontSize: 11, marginBottom: 16 }}>กล่องต่อวัน</div>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={topSKU} margin={{ left: -20, bottom: 0 }}>
+                  <XAxis dataKey="sku" tick={{ fill: palette.muted, fontSize: 10 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: palette.muted, fontSize: 10 }} axisLine={false} tickLine={false} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="sales" name="ยอดขาย/วัน" radius={[6, 6, 0, 0]}>
+                    {topSKU.map((_, i) => (
+                      <Cell key={i} fill={`hsl(${170 + i * 15}, 80%, ${55 - i * 3}%)`} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
