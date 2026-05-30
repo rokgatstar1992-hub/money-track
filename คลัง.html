@@ -1,0 +1,340 @@
+import { useState, useRef, useEffect } from "react";
+
+const SYSTEM_PROMPT = `คุณคือ DC Blueprint Assistant ผู้เชี่ยวชาญด้านการบริหารจัดการคลังสินค้าระดับ World-class Distribution Center
+
+ความรู้ที่คุณมีมาจาก Comprehensive Blueprint ต่อไปนี้:
+
+**PART 1: Space & Capacity Planning**
+- ออกแบบจาก Peak Volume ของสินค้า Top Rank + buffer 30%
+- สัดส่วนพื้นที่: Storage 45% / Aisle 35% / Staging & Dock 15% / Office 5%
+- รักษา Warehouse Utilization ไม่เกิน 85%
+
+**PART 2: Layout & Vertical Allocation**
+- Multi-U Shape Layout แยกโซนตาม ABC Analysis
+- สินค้า Top Rank วางใกล้ประตูทางเข้า-ออก
+- ชั้น 1 (Pick Face): สินค้า Top Rank ล็อตเก่าสุดพร้อมเบิกจ่าย
+- ชั้น 2-3 (Reserve): สินค้าล็อตใหม่รอโอนเติม
+- โอนเติมเมื่อชั้น 1 พร่องเกิน 30%
+
+**PART 3: Shift & Operations**
+- รัน 24 ชั่วโมง 3 ผลัด มี Night Shift เป็นกระดูกสันหลัง
+- 3 ตำแหน่งหลัก: Inbound Checker / Reach Truck Driver / Picker
+- Picker แตะเฉพาะชั้น 1 เพื่อรักษา FIFO 100%
+- คืนวันอาทิตย์ (ผลัดดึก): Pre-Picking + แร็พพาเลทรองรับ Peak วันจันทร์
+- วันอาทิตย์กลางวัน: Cycle Count + Re-slotting
+
+**PART 4: Inventory Control / QA Team**
+- ตั้งแผนก IC/QA แยกอิสระ ไม่ขึ้นตรงกับฝั่งปฏิบัติการ
+- ทำงาน Off-Peak Hours (04:00-07:00 น. หรือช่วงดึก)
+- 3 ภารกิจ: Auditing FIFO / Min-Max Review / Slotting Planning
+- Min-Max: ชั้น 1 ต้องมี buffer 100% + เผื่อ 30%
+
+**PART 5: Human Factor**
+- ปัญหา: แรงกดดันความเร็ว ทำให้เลือกความเร็วมากกว่าความถูกต้อง
+- ปัญหา: Overstock ทำลาย FIFO ลาน U ตัน รถยกวิ่งสวนไม่ได้
+- แก้ด้วย: KPI ผูกโบนัสกับ Inventory Accuracy
+- แก้ด้วย: CCTV ส่องที่ Pick Face ให้ IC ตรวจสอบย้อนหลังได้
+- แนวคิด Pilot Project: เช่าคลังทดสอบ 1 ปีก่อนสร้างจริง
+
+ตอบเป็นภาษาไทยเสมอ ใช้ภาษากระชับ เข้าใจง่าย มีความเป็นมืออาชีพ
+ถ้าถามนอกเหนือจาก Blueprint นี้ ให้บอกว่าไม่มีข้อมูลในระบบและแนะนำให้ปรึกษาผู้เชี่ยวชาญ
+ใช้ emoji เพื่อให้อ่านง่ายขึ้น`;
+
+const QUICK_QUESTIONS = [
+  "📐 วิธีคำนวณพื้นที่คลังสินค้า",
+  "🏢 Layout แบบ Multi-U Shape คืออะไร",
+  "🕒 การจัดกะงาน 3 ผลัดทำยังไง",
+  "🛡️ หน้าที่ของทีม IC/QA",
+  "⚠️ ปัญหา FIFO ล่มแก้ยังไง",
+];
+
+function TypingIndicator() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "12px 16px" }}>
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          style={{
+            width: 8, height: 8, borderRadius: "50%",
+            background: "#00d4aa",
+            animation: "bounce 1.2s ease-in-out infinite",
+            animationDelay: `${i * 0.2}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Message({ msg }) {
+  const isUser = msg.role === "user";
+  return (
+    <div style={{
+      display: "flex",
+      justifyContent: isUser ? "flex-end" : "flex-start",
+      marginBottom: 16,
+      gap: 10,
+      alignItems: "flex-start",
+    }}>
+      {!isUser && (
+        <div style={{
+          width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+          background: "linear-gradient(135deg, #00d4aa, #0077ff)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 16, boxShadow: "0 0 12px rgba(0,212,170,0.4)",
+        }}>🏭</div>
+      )}
+      <div style={{
+        maxWidth: "75%",
+        background: isUser
+          ? "linear-gradient(135deg, #0077ff, #005fd4)"
+          : "rgba(255,255,255,0.06)",
+        border: isUser ? "none" : "1px solid rgba(255,255,255,0.1)",
+        borderRadius: isUser ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+        padding: "12px 16px",
+        color: "#f0f4ff",
+        fontSize: 14,
+        lineHeight: 1.65,
+        whiteSpace: "pre-wrap",
+        boxShadow: isUser
+          ? "0 4px 16px rgba(0,119,255,0.3)"
+          : "0 2px 8px rgba(0,0,0,0.2)",
+      }}>
+        {msg.content}
+      </div>
+      {isUser && (
+        <div style={{
+          width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+          background: "rgba(255,255,255,0.15)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 16,
+        }}>👤</div>
+      )}
+    </div>
+  );
+}
+
+export default function DCChatbot() {
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      content: "สวัสดีครับ! 👋 ผมคือ DC Blueprint Assistant\n\nผมพร้อมตอบคำถามเกี่ยวกับกลยุทธ์การบริหารจัดการคลังสินค้าระดับ World-class ตาม Blueprint ที่คุณมีครับ\n\nถามได้เลย หรือกดปุ่มด้านล่างเพื่อเริ่มต้น! 🏭",
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  async function sendMessage(text) {
+    const userMsg = text || input.trim();
+    if (!userMsg || loading) return;
+    setInput("");
+
+    const newMessages = [...messages, { role: "user", content: userMsg }];
+    setMessages(newMessages);
+    setLoading(true);
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
+        }),
+      });
+      const data = await response.json();
+      const reply = data.content?.map((c) => c.text || "").join("") || "ขออภัย เกิดข้อผิดพลาดครับ";
+      setMessages([...newMessages, { role: "assistant", content: reply }]);
+    } catch {
+      setMessages([...newMessages, { role: "assistant", content: "⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้งครับ" }]);
+    } finally {
+      setLoading(false);
+      inputRef.current?.focus();
+    }
+  }
+
+  return (
+    <div style={{
+      height: "100vh", display: "flex", flexDirection: "column",
+      background: "linear-gradient(160deg, #0a0f1e 0%, #0d1b2a 50%, #0a1628 100%)",
+      fontFamily: "'Sarabun', 'Noto Sans Thai', sans-serif",
+      position: "relative", overflow: "hidden",
+    }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+        .msg-in { animation: fadeUp 0.3s ease; }
+        textarea:focus { outline: none; }
+        textarea { resize: none; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+        .quick-btn:hover { background: rgba(0,212,170,0.2) !important; border-color: rgba(0,212,170,0.5) !important; transform: translateY(-1px); }
+        .send-btn:hover { opacity: 0.9; transform: scale(1.05); }
+        .send-btn:active { transform: scale(0.97); }
+      `}</style>
+
+      {/* Ambient glow */}
+      <div style={{
+        position: "absolute", top: -100, left: "50%", transform: "translateX(-50%)",
+        width: 600, height: 300, borderRadius: "50%",
+        background: "radial-gradient(ellipse, rgba(0,119,255,0.12) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
+      {/* Header */}
+      <div style={{
+        padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,0.08)",
+        background: "rgba(255,255,255,0.03)", backdropFilter: "blur(12px)",
+        display: "flex", alignItems: "center", gap: 12, flexShrink: 0,
+      }}>
+        <div style={{
+          width: 44, height: 44, borderRadius: 12,
+          background: "linear-gradient(135deg, #00d4aa, #0077ff)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 22, boxShadow: "0 0 20px rgba(0,212,170,0.35)",
+        }}>🏭</div>
+        <div>
+          <div style={{ color: "#f0f4ff", fontWeight: 700, fontSize: 16, letterSpacing: 0.3 }}>
+            DC Blueprint Assistant
+          </div>
+          <div style={{ color: "#00d4aa", fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{
+              width: 7, height: 7, borderRadius: "50%", background: "#00d4aa",
+              animation: "pulse 2s infinite",
+            }} />
+            World-class Distribution Center Expert
+          </div>
+        </div>
+        <div style={{
+          marginLeft: "auto", fontSize: 11, color: "rgba(255,255,255,0.3)",
+          textAlign: "right", lineHeight: 1.5,
+        }}>
+          Powered by<br />Claude AI
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div style={{
+        flex: 1, overflowY: "auto", padding: "20px 16px",
+        display: "flex", flexDirection: "column",
+      }}>
+        {messages.map((msg, i) => (
+          <div key={i} className="msg-in">
+            <Message msg={msg} />
+          </div>
+        ))}
+        {loading && (
+          <div style={{ display: "flex", justifyContent: "flex-start", gap: 10, alignItems: "flex-start" }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+              background: "linear-gradient(135deg, #00d4aa, #0077ff)",
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16,
+            }}>🏭</div>
+            <div style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: "18px 18px 18px 4px",
+            }}>
+              <TypingIndicator />
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Quick questions */}
+      {messages.length <= 1 && (
+        <div style={{ padding: "0 16px 12px", display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {QUICK_QUESTIONS.map((q, i) => (
+            <button
+              key={i}
+              className="quick-btn"
+              onClick={() => sendMessage(q.replace(/^[^\s]+\s/, ""))}
+              style={{
+                background: "rgba(0,212,170,0.08)",
+                border: "1px solid rgba(0,212,170,0.25)",
+                borderRadius: 20, padding: "7px 14px",
+                color: "#a8e6dc", fontSize: 12, cursor: "pointer",
+                transition: "all 0.2s", fontFamily: "inherit",
+              }}
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Input area */}
+      <div style={{
+        padding: "12px 16px 16px",
+        borderTop: "1px solid rgba(255,255,255,0.08)",
+        background: "rgba(255,255,255,0.02)",
+        flexShrink: 0,
+      }}>
+        <div style={{
+          display: "flex", gap: 10, alignItems: "flex-end",
+          background: "rgba(255,255,255,0.07)",
+          border: "1px solid rgba(255,255,255,0.12)",
+          borderRadius: 16, padding: "10px 14px",
+          transition: "border-color 0.2s",
+        }}>
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
+            placeholder="ถามเกี่ยวกับกลยุทธ์คลังสินค้า..."
+            rows={1}
+            style={{
+              flex: 1, background: "transparent",
+              border: "none", color: "#f0f4ff",
+              fontSize: 14, lineHeight: 1.6,
+              fontFamily: "inherit",
+              maxHeight: 120, overflowY: "auto",
+            }}
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+            }}
+          />
+          <button
+            className="send-btn"
+            onClick={() => sendMessage()}
+            disabled={loading || !input.trim()}
+            style={{
+              width: 36, height: 36, borderRadius: 10, border: "none",
+              background: input.trim() && !loading
+                ? "linear-gradient(135deg, #00d4aa, #0077ff)"
+                : "rgba(255,255,255,0.1)",
+              cursor: input.trim() && !loading ? "pointer" : "not-allowed",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 16, transition: "all 0.2s", flexShrink: 0,
+              boxShadow: input.trim() && !loading ? "0 0 12px rgba(0,212,170,0.4)" : "none",
+            }}
+          >
+            {loading ? "⏳" : "➤"}
+          </button>
+        </div>
+        <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", fontSize: 11, marginTop: 8 }}>
+          Enter ส่ง • Shift+Enter ขึ้นบรรทัดใหม่
+        </div>
+      </div>
+    </div>
+  );
+}
